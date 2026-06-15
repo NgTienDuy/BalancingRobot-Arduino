@@ -1,0 +1,4 @@
+VERSION:3 SOURCE_TIMESTAMP:5CCFA973
+NODE:I LEVEL:0 LINE:1 "C:\Users\Administrator\Documents\Self_Balancing_Rover_cop\pid.h"
+NODE:F LEVEL:0 LINE:3 "PID_Init(struct PID_Controller * pid,float Kp,float Ki,float Kd,float integral_limit,float output_limit,float setpoint)"
+NODE:F LEVEL:0 LINE:19 "PID_Compute(struct PID_Controller * pid,float current_angle,float dt)"

@@ -1,0 +1,6 @@
+main DSTACK_USAGE:28 DSTACK_LEVEL:28 FILE:"Self_Balancing_Rover.c" LINE:36
+MPU6050_Read_Raw DSTACK_USAGE:32 DSTACK_LEVEL:60 FILE:"mpu6050.c" LINE:155
+atan2 DSTACK_USAGE:12 DSTACK_LEVEL:72 FILE:"C:\cvavreval\lib\math.lib" LINE:861
+yatan DSTACK_USAGE:4 DSTACK_LEVEL:76 FILE:"C:\cvavreval\lib\math.lib" LINE:829
+xatan DSTACK_USAGE:8 DSTACK_LEVEL:84 FILE:"C:\cvavreval\lib\math.lib" LINE:822
+timer0_ovf_isr DSTACK_USAGE:3 DSTACK_LEVEL:87 FILE:"Self_Balancing_Rover.c" LINE:62

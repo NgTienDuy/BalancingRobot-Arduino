@@ -1,0 +1,17 @@
+/*
+ * Self_Balancing_Rover.c
+ *
+ * Created: 6/15/2026 9:01:34 PM
+ * Author: Administrator
+ */
+
+#include <mega328p.h>
+
+void main(void)
+{
+while (1)
+    {
+    // Please write your application code here
+
+    }
+}

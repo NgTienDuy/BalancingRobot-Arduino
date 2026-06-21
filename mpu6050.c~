@@ -1,0 +1,105 @@
+/*============================================================================
+  mpu6050.c  -  Doc cam bien (MPU6050 hoac MPU6500/clone tuong thich) qua TWI.
+                Chap nhan moi WHO_AM_I hop le (chi loai 0x00/0xFF = mat ket noi).
+============================================================================*/
+#include <mega328p.h>
+#include <stdint.h>
+#include <math.h>
+#include <delay.h>
+#include "config.h"
+#include "i2c.h"
+#include "mpu6050.h"
+
+static float         gyro_bias = 0.0f;
+static unsigned char who_id    = 0;
+
+static void mpu_write_reg(unsigned char reg, unsigned char val)
+{
+    i2c_start(MPU6050_ADDR_W);
+    i2c_write(reg);
+    i2c_write(val);
+    i2c_stop();
+}
+
+static unsigned char mpu_read_reg(unsigned char reg)
+{
+    unsigned char v;
+    i2c_start(MPU6050_ADDR_W);
+    i2c_write(reg);
+    i2c_start(MPU6050_ADDR_R);          /* repeated start */
+    v = i2c_read_nack();
+    i2c_stop();
+    return v;
+}
+
+unsigned char MPU6050_WhoAmI(void) { return who_id; }
+
+unsigned char MPU6050_Init(void)
+{
+    i2c_init();
+    delay_ms(100);
+
+    mpu_write_reg(MPU6050_RA_PWR_MGMT_1,  0x00);  /* wake up                 */
+    delay_ms(10);
+    mpu_write_reg(MPU6050_RA_SMPLRT_DIV,  0x09);  /* 1kHz/(1+9) = 100 Hz     */
+    mpu_write_reg(MPU6050_RA_CONFIG,      0x03);  /* DLPF ~44Hz (loc nhieu)  */
+    mpu_write_reg(MPU6050_RA_GYRO_CONFIG, 0x00);  /* +/-250 dps              */
+    mpu_write_reg(MPU6050_RA_ACCEL_CONFIG,0x00);  /* +/-2g                   */
+    delay_ms(10);
+
+    who_id = mpu_read_reg(MPU6050_RA_WHO_AM_I);
+    /* Chap nhan MPU6050(0x68) lan clone MPU6500(0x70)/9250(0x71)...
+       Chi coi la loi khi khong co phan hoi (0x00 hoac 0xFF).               */
+    return (who_id != 0x00 && who_id != 0xFF) ? 1 : 0;
+}
+
+void MPU6050_Read(MPU6050_Data *d)
+{
+    unsigned char b[14];
+    unsigned char i;
+
+    i2c_start(MPU6050_ADDR_W);
+    i2c_write(MPU6050_RA_ACCEL_XOUT_H);
+    i2c_start(MPU6050_ADDR_R);
+    for (i = 0; i < 13; i++) b[i] = i2c_read_ack();
+    b[13] = i2c_read_nack();
+    i2c_stop();
+
+    d->ax = (int16_t)((b[0]  << 8) | b[1]);
+    d->ay = (int16_t)((b[2]  << 8) | b[3]);
+    d->az = (int16_t)((b[4]  << 8) | b[5]);
+    /* b[6],b[7] = TEMP (bo qua) */
+    d->gx = (int16_t)((b[8]  << 8) | b[9]);
+    d->gy = (int16_t)((b[10] << 8) | b[11]);
+    d->gz = (int16_t)((b[12] << 8) | b[13]);
+
+#if TILT_USES_X_ACCEL
+    d->angle_acc = ACC_ANGLE_SIGN *
+                   atan2((float)d->ax, ACC_Z_SIGN * (float)d->az) * RAD2DEG;
+    d->gyro_rate = GYRO_RATE_SIGN * (((float)d->gy - gyro_bias) / GYRO_SENS);
+#else
+    d->angle_acc = ACC_ANGLE_SIGN *
+                   atan2((float)d->ay, ACC_Z_SIGN * (float)d->az) * RAD2DEG;
+    d->gyro_rate = GYRO_RATE_SIGN * (((float)d->gx - gyro_bias) / GYRO_SENS);
+#endif
+}
+
+void MPU6050_CalibrateGyro(void)
+{
+    unsigned int n;
+    long sum = 0;
+    MPU6050_Data d;
+
+    gyro_bias = 0.0f;
+    for (n = 0; n < 1000; n++)
+    {
+        MPU6050_Read(&d);
+#if TILT_USES_X_ACCEL
+        sum += d.gy;
+#else
+        sum += d.gx;
+#endif
+        delay_ms(2);
+    }
+    gyro_bias = (float)sum / 1000.0f;
+}

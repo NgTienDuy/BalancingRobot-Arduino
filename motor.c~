@@ -1,0 +1,66 @@
+/*============================================================================
+  motor.c  -  Timer1 Fast PWM mode 14 (TOP=ICR1=799) -> 20 kHz tren OC1A/OC1B
+              Chieu quay qua IN1..IN4. Co bu dead-band.
+
+  CHAN THEO SO DO PHAN CUNG:
+     ENA = OC1A = PB1 (D9)      ENB = OC1B = PB2 (D10)
+     IN1 = PD2 (D2)  IN2 = PD4 (D4)  -> dong co TRAI
+     IN3 = PD7 (D7)  IN4 = PB0 (D8)  -> dong co PHAI
+============================================================================*/
+#include <mega328p.h>
+#include "config.h"
+#include "motor.h"
+
+static unsigned int clamp_duty(int d)
+{
+    if (d < 0) d = -d;
+    if (d > MOTOR_MAX_DUTY) d = MOTOR_MAX_DUTY;
+    if (d != 0 && d < MOTOR_DEADBAND) d = MOTOR_DEADBAND;
+    return (unsigned int)d;
+}
+
+void Motor_Init(void)
+{
+    /* IN1=PD2, IN2=PD4, IN3=PD7 = output */
+    DDRD |= (1 << 2) | (1 << 4) | (1 << 7);
+    /* IN4=PB0, ENA=PB1(OC1A), ENB=PB2(OC1B) = output */
+    DDRB |= (1 << 0) | (1 << 1) | (1 << 2);
+
+    /* Fast PWM mode 14: WGM13:12:11:10 = 1110, TOP=ICR1, non-inverting */
+    TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11);
+    TCCR1B = (1 << WGM13)  | (1 << WGM12)  | (1 << CS10);   /* prescaler 1 */
+    ICR1   = PWM_TOP;
+    OCR1A  = 0;
+    OCR1B  = 0;
+}
+
+/* Dong co TRAI: IN1=PD2, IN2=PD4, EN=OC1A */
+static void set_left(int speed)
+{
+    unsigned int duty = clamp_duty(speed);
+    if (speed >= 0) { PORTD.2 = 1; PORTD.4 = 0; }
+    else            { PORTD.2 = 0; PORTD.4 = 1; }
+    OCR1A = duty;
+}
+
+/* Dong co PHAI: IN3=PD7, IN4=PB0, EN=OC1B */
+static void set_right(int speed)
+{
+    unsigned int duty = clamp_duty(speed);
+    if (speed >= 0) { PORTD.7 = 1; PORTB.0 = 0; }
+    else            { PORTD.7 = 0; PORTB.0 = 1; }
+    OCR1B = duty;
+}
+
+void Motor_SetDuty(int left, int right)
+{
+    /* can bang toc do 2 dong co (xem MOTOR_L_SCALE / MOTOR_R_SCALE) */
+    set_left ((int)((long)left  * MOTOR_L_SCALE / 100));
+    set_right((int)((long)right * MOTOR_R_SCALE / 100));
+}
+
+void Motor_Stop(void)
+{
+    OCR1A = 0; OCR1B = 0;
+    PORTD.2 = 0; PORTD.4 = 0; PORTD.7 = 0; PORTB.0 = 0;
+}

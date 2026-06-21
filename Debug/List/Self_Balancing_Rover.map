@@ -1,11 +1,15 @@
 RAM Allocation [bytes]
 Variable                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-g_flag_compute                                                                    0x0300       1
-g_pid                                                                             0x0301      44
-counter (Self_Balancing_Rover.c)                                                  0x032D       1
-g_alpha (mpu6050.c)                                                               0x032E       4
-_seed (stdlib.lib)                                                                0x0332       4
+g_tick                                                                            0x03DD       1
+imu                                                                               0x03DE      20
+filt                                                                              0x03F2       9
+pid                                                                               0x03FB      37
+line (Self_Balancing_Rover.c)                                                     0x0420      16
+idx (Self_Balancing_Rover.c)                                                      0x0430       1
+gyro_bias (mpu6050.c)                                                             0x0431       4
+who_id (mpu6050.c)                                                                0x0435       1
+_seed (stdlib.lib)                                                                0x0436       4
 
 EEPROM Allocation [bytes]
 Variable                                                                          Address   Size
@@ -14,28 +18,3 @@ Variable                                                                        
 Register Allocation
 Variable                                                                          Register  Size
 ------------------------------------------------------------------------------------------------
-
-FLASH Allocation [words]
-Function                                                                          Address   Size
-------------------------------------------------------------------------------------------------
-Init_System                                                                       0x00072     41
-main                                                                              0x0009B     40
-timer0_ovf_isr                                                                    0x000C3     26
-Motor_PwmValue_G001                                                               0x000DD     16
-Set_Left_Speed_G001                                                               0x000ED     14
-Set_Right_Speed_G001                                                              0x000FB     14
-Motor_Init                                                                        0x00109     22
-Motor_Control                                                                     0x0011F     35
-i2c_delay_G002                                                                    0x00142      9
-i2c_init_G002                                                                     0x0014B      3
-i2c_start_G002                                                                    0x0014E      9
-i2c_stop_G002                                                                     0x00157      6
-i2c_write_G002                                                                    0x0015D     36
-i2c_read_G002                                                                     0x00181     26
-MPU6050_Init                                                                      0x0019B     15
-MPU6050_Read_Raw                                                                  0x001AA    241
-PID_Init                                                                          0x0029B     79
-PID_Compute                                                                       0x002EA    175
-xatan                                                                             0x00399     29
-yatan                                                                             0x003B6     49
-atan2                                                                             0x003E7     73

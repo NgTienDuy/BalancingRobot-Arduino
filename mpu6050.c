@@ -1,212 +1,129 @@
+/*============================================================================
+  mpu6050.c  -  Doc cam bien qua TWI. Tinh goc bang SO NGUYEN (khong atan2).
+============================================================================*/
 #include <mega328p.h>
 #include <stdint.h>
-#include <math.h>
+#include <delay.h>
+#include "config.h"
+#include "myi2c.h"
 #include "mpu6050.h"
 
-// ============================================================
-// Manual bit-bang I2C for ATmega328P (SCL=PORTC.5, SDA=PORTC.4)
-// ============================================================
-#define I2C_DDR   DDRC
-#define I2C_PORT  PORTC
-#define I2C_PIN   PINC
-#define I2C_SCL   5
-#define I2C_SDA   4
+static int gyro_bias = 0;
+static unsigned char who_id = 0;
 
-#define SCL_HIGH() (I2C_DDR &= ~(1 << I2C_SCL))   // release -> pull-up high
-#define SCL_LOW()  (I2C_DDR |= (1 << I2C_SCL))    // drive low
-#define SDA_HIGH() (I2C_DDR &= ~(1 << I2C_SDA))
-#define SDA_LOW()  (I2C_DDR |= (1 << I2C_SDA))
-#define SDA_IN()   (I2C_PIN & (1 << I2C_SDA))
-
-static void i2c_delay(void)
+static void mpu_write_reg(unsigned char reg, unsigned char val)
 {
-    // ~5 us at 8 MHz (rough tuning for 100 kHz I2C)
+    myi2c_start(MPU6050_ADDR_W);
+    myi2c_write(reg);
+    myi2c_write(val);
+    myi2c_stop();
+}
+static unsigned char mpu_read_reg(unsigned char reg)
+{
+    unsigned char v;
+    myi2c_start(MPU6050_ADDR_W);
+    myi2c_write(reg);
+    myi2c_start(MPU6050_ADDR_R);
+    v = myi2c_read_nack();
+    myi2c_stop();
+    return v;
+}
+
+unsigned char MPU6050_WhoAmI(void) { return who_id; }
+
+unsigned char MPU6050_Init(void)
+{
+    unsigned char tries;
+
+    myi2c_init();
+    delay_ms(100);
+
+    for (tries = 0; tries < 3; tries++)
+    {
+        myi2c_clear_fault();
+        mpu_write_reg(MPU6050_RA_PWR_MGMT_1,  0x00);
+        delay_ms(10);
+        mpu_write_reg(MPU6050_RA_SMPLRT_DIV,  0x09);
+        mpu_write_reg(MPU6050_RA_CONFIG,      0x03);
+        mpu_write_reg(MPU6050_RA_GYRO_CONFIG, 0x00);
+        mpu_write_reg(MPU6050_RA_ACCEL_CONFIG,0x00);
+        delay_ms(10);
+
+        myi2c_clear_fault();
+        who_id = mpu_read_reg(MPU6050_RA_WHO_AM_I);
+        if (!myi2c_fault() && who_id != 0x00 && who_id != 0xFF)
+            return 1;
+
+        myi2c_recover();          /* bus co the ket -> giai phong roi thu lai */
+        delay_ms(50);
+    }
+    return 0;
+}
+
+unsigned char MPU6050_Read(MPU6050_Data *d)
+{
+    unsigned char b[14];
     unsigned char i;
-    for (i = 0; i < 3; i++) {
-        #asm("nop");
-    }
-}
+    int16_t tilt_acc, gyro_axis;
+    long den, a;
 
-static void i2c_init(void)
-{
-    SDA_HIGH();
-    SCL_HIGH();
-}
+    myi2c_clear_fault();
+    myi2c_start(MPU6050_ADDR_W);
+    myi2c_write(MPU6050_RA_ACCEL_XOUT_H);
+    myi2c_start(MPU6050_ADDR_R);
+    for (i = 0; i < 13; i++) b[i] = myi2c_read_ack();
+    b[13] = myi2c_read_nack();
+    myi2c_stop();
 
-static unsigned char i2c_start(void)
-{
-    SDA_HIGH();
-    SCL_HIGH();
-    i2c_delay();
-    SDA_LOW();
-    i2c_delay();
-    SCL_LOW();
-    i2c_delay();
-    return 1; // success
-}
+    if (myi2c_fault()) return 0;          /* doc that bai -> bao loi */
 
-static void i2c_stop(void)
-{
-    SDA_LOW();
-    SCL_HIGH();
-    i2c_delay();
-    SDA_HIGH();
-    i2c_delay();
-}
+    d->ax = (int16_t)((b[0]  << 8) | b[1]);
+    d->ay = (int16_t)((b[2]  << 8) | b[3]);
+    d->az = (int16_t)((b[4]  << 8) | b[5]);
+    d->gx = (int16_t)((b[8]  << 8) | b[9]);
+    d->gy = (int16_t)((b[10] << 8) | b[11]);
+    d->gz = (int16_t)((b[12] << 8) | b[13]);
 
-static unsigned char i2c_write(unsigned char data)
-{
-    unsigned char i;
-    for (i = 0; i < 8; i++)
-    {
-        if (data & 0x80)
-            SDA_HIGH();
-        else
-            SDA_LOW();
-        data <<= 1;
-        i2c_delay();
-        SCL_HIGH();
-        i2c_delay();
-        SCL_LOW();
-        i2c_delay();
-    }
-    // Release SDA for ACK, read ACK bit
-    SDA_HIGH();
-    i2c_delay();
-    SCL_HIGH();
-    i2c_delay();
-    {
-        unsigned char ack = SDA_IN() == 0;
-        SCL_LOW();
-        i2c_delay();
-        return ack;
-    }
-}
+#if TILT_USES_X_ACCEL
+    tilt_acc  = d->ax;  gyro_axis = d->gy;
+#else
+    tilt_acc  = d->ay;  gyro_axis = d->gx;
+#endif
 
-static unsigned char i2c_read(unsigned char ack)
-{
-    unsigned char i, data = 0;
-    SDA_HIGH();
-    for (i = 0; i < 8; i++)
-    {
-        data <<= 1;
-        SCL_HIGH();
-        i2c_delay();
-        if (SDA_IN())
-            data |= 1;
-        SCL_LOW();
-        i2c_delay();
-    }
-    // Send ACK/NACK
-    if (ack)
-        SDA_LOW();
+    /* goc accel (cdeg) ~ (tilt_acc / az_up) * 5730 */
+    den = (long)ACC_Z_SIGN * (long)d->az;          /* thanh phan huong len, ~+16384 */
+    if (den < 2000L)                               /* gan nam ngang -> coi nhu nga */
+        a = (tilt_acc >= 0) ? 9000L : -9000L;
     else
-        SDA_HIGH();
-    i2c_delay();
-    SCL_HIGH();
-    i2c_delay();
-    SCL_LOW();
-    i2c_delay();
-    SDA_HIGH();
-    return data;
-}
-
-// ============================================================
-// MPU6050 functions
-// ============================================================
-
-static float g_alpha = 0.96f;
-
-void MPU6050_Init(void)
-{
-    i2c_init();
-    i2c_start();
-    i2c_stop();
-
-    // Wake up sensor
-    i2c_start();
-    i2c_write(MPU6050_I2C_ADDR << 1);
-    i2c_write(MPU6050_RA_PWR_MGMT_1);
-    i2c_write(0x00);
-    i2c_stop();
-
-    // DLPF off
-    i2c_start();
-    i2c_write(MPU6050_I2C_ADDR << 1);
-    i2c_write(MPU6050_RA_CONFIG);
-    i2c_write(0x00);
-    i2c_stop();
-
-    // Gyro config: +/-250 deg/s
-    i2c_start();
-    i2c_write(MPU6050_I2C_ADDR << 1);
-    i2c_write(MPU6050_RA_GYRO_CONFIG);
-    i2c_write(0x00);
-    i2c_stop();
-
-    // Accel config: +/-2g
-    i2c_start();
-    i2c_write(MPU6050_I2C_ADDR << 1);
-    i2c_write(MPU6050_RA_ACCEL_CONFIG);
-    i2c_write(0x00);
-    i2c_stop();
-}
-
-void MPU6050_Read_Raw(MPU6050_Data* data, float dt)
-{
-    unsigned char buf[14];
-    int16_t ax, ay, az, gx, gy, gz;
-
-    i2c_start();
-    i2c_write(MPU6050_I2C_ADDR << 1);
-    i2c_write(MPU6050_RA_ACCEL_XOUT_H);
-    i2c_start();
-    i2c_write((MPU6050_I2C_ADDR << 1) | 1);
-
-    buf[0] = i2c_read(1);
-    buf[1] = i2c_read(1);
-    buf[2] = i2c_read(1);
-    buf[3] = i2c_read(1);
-    buf[4] = i2c_read(1);
-    buf[5] = i2c_read(1);
-    buf[6] = i2c_read(1);
-    buf[7] = i2c_read(1);
-    buf[8] = i2c_read(1);
-    buf[9] = i2c_read(1);
-    buf[10] = i2c_read(1);
-    buf[11] = i2c_read(1);
-    buf[12] = i2c_read(1);
-    buf[13] = i2c_read(0);
-
-    i2c_stop();
-
-    ax = (int16_t)((buf[0] << 8) | buf[1]);
-    ay = (int16_t)((buf[2] << 8) | buf[3]);
-    az = (int16_t)((buf[4] << 8) | buf[5]);
-    gx = (int16_t)((buf[8] << 8) | buf[9]);
-    gy = (int16_t)((buf[10] << 8) | buf[11]);
-    gz = (int16_t)((buf[12] << 8) | buf[13]);
-
-    data->accel_x = ax;
-    data->accel_y = ay;
-    data->accel_z = az;
-    data->gyro_x = gx;
-    data->gyro_y = gy;
-    data->gyro_z = gz;
-
-    // Convert raw sensor data to physical units.
-    // Accel range: +/-2g  => 16384 LSB/g
-    // Gyro range: +/-250 deg/s => 131 LSB/(deg/s)
-    data->angle_acc = atan2((float)ay, (float)az) * 57.29578f;
-    data->angle_gyro = (float)gy / 131.0f;
-
-    if (data->angle_filtered == 0.0f)
     {
-        data->angle_filtered = data->angle_acc;
+        a = ((long)tilt_acc * ACC_CDEG_K) / den;
+        if (a >  9000L) a =  9000L;
+        if (a < -9000L) a = -9000L;
     }
+    d->acc_cdeg = (int)(ACC_ANGLE_SIGN * a);
 
-    // Complementary filter: fuse gyro integration with accelerometer angle.
-    // dt must be fixed by a timer interrupt (recommended 5 ms to 10 ms).
-    data->angle_filtered = g_alpha * (data->angle_filtered + data->angle_gyro * dt) +
-                           (1.0f - g_alpha) * data->angle_acc;
+    /* gyro delta moi tick (cdeg) = (gy - bias)/131 */
+    d->gyro_dcdeg = (int)(GYRO_RATE_SIGN *
+                          ((long)(gyro_axis - gyro_bias) / GYRO_LSB_PER_DPS));
+    return 1;
+}
+
+void MPU6050_CalibrateGyro(void)
+{
+    unsigned int n;
+    long sum = 0;
+    MPU6050_Data d;
+
+    gyro_bias = 0;
+    for (n = 0; n < 1000; n++)
+    {
+        MPU6050_Read(&d);
+#if TILT_USES_X_ACCEL
+        sum += d.gy;
+#else
+        sum += d.gx;
+#endif
+        delay_ms(2);
+    }
+    gyro_bias = (int)(sum / 1000L);
 }

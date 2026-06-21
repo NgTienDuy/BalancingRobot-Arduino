@@ -1,107 +1,119 @@
-; 0003 0004 float integral_limit, float output_limit, float setpoint)
-;float integral_limit, float output_limit, float setpoint)
-; 0003 0005 {
+; 0006 000B long i_limit, int out_limit, int setpoint_cdeg)
+;long i_limit, int out_limit, int setpoint_cdeg)
+; 0006 000C {
 
 	.CSEG
 ;PCODE: $00000000 VOL: 0
 ;PCODE: $00000001 VOL: 0
-; 0003 0006 pid->Kp = Kp;
+; 0006 000D p->Kp_x10 = kp_x10; p->Ki_x10 = ki_x10; p->Kd_x10 = kd_x10;
 ;PCODE: $00000002 VOL: 0
 ;PCODE: $00000003 VOL: 0
 ;PCODE: $00000004 VOL: 0
 ;PCODE: $00000005 VOL: 0
 ;PCODE: $00000006 VOL: 0
-;	*pid -> R16,R17
-;	Kp -> Y+22
-;	Ki -> Y+18
-;	Kd -> Y+14
-;	integral_limit -> Y+10
-;	output_limit -> Y+6
-;	setpoint -> Y+2
 ;PCODE: $00000007 VOL: 0
+;	*p -> Y+18
+;	kp_x10 -> Y+16
+;	ki_x10 -> Y+14
+;	kd_x10 -> R20,R21
+;	i_limit -> Y+8
+;	out_limit -> R18,R19
+;	setpoint_cdeg -> R16,R17
 ;PCODE: $00000008 VOL: 0
 ;PCODE: $00000009 VOL: 0
-; 0003 0007 pid->Ki = Ki;
 ;PCODE: $0000000A VOL: 0
 ;PCODE: $0000000B VOL: 0
 ;PCODE: $0000000C VOL: 0
-; 0003 0008 pid->Kd = Kd;
 ;PCODE: $0000000D VOL: 0
 ;PCODE: $0000000E VOL: 0
 ;PCODE: $0000000F VOL: 0
-; 0003 0009 pid->Integral = 0.0f;
 ;PCODE: $00000010 VOL: 0
+; 0006 000E p->setpoint_cdeg = setpoint_cdeg;
 ;PCODE: $00000011 VOL: 0
 ;PCODE: $00000012 VOL: 0
 ;PCODE: $00000013 VOL: 0
-; 0003 000A pid->Derivative = 0.0f;
+; 0006 000F p->integral = 0;
 ;PCODE: $00000014 VOL: 0
 ;PCODE: $00000015 VOL: 0
 ;PCODE: $00000016 VOL: 0
 ;PCODE: $00000017 VOL: 0
-; 0003 000B pid->Error = 0.0f;
+; 0006 0010 p->prev_meas = 0;
 ;PCODE: $00000018 VOL: 0
 ;PCODE: $00000019 VOL: 0
 ;PCODE: $0000001A VOL: 0
 ;PCODE: $0000001B VOL: 0
-; 0003 000C pid->Last_Error = 0.0f;
+; 0006 0011 p->dfilt = 0;
 ;PCODE: $0000001C VOL: 0
 ;PCODE: $0000001D VOL: 0
 ;PCODE: $0000001E VOL: 0
 ;PCODE: $0000001F VOL: 0
-; 0003 000D pid->Setpoint = setpoint;
+; 0006 0012 p->i_limit = i_limit;
 ;PCODE: $00000020 VOL: 0
 ;PCODE: $00000021 VOL: 0
 ;PCODE: $00000022 VOL: 0
-; 0003 000E pid->Integral_Limit = integral_limit;
+; 0006 0013 p->out_limit = out_limit;
 ;PCODE: $00000023 VOL: 0
 ;PCODE: $00000024 VOL: 0
 ;PCODE: $00000025 VOL: 0
-; 0003 000F pid->Output_Limit = output_limit;
+; 0006 0014 p->init = 0;
 ;PCODE: $00000026 VOL: 0
 ;PCODE: $00000027 VOL: 0
 ;PCODE: $00000028 VOL: 0
-; 0003 0010 pid->Output = 0.0f;
 ;PCODE: $00000029 VOL: 0
+; 0006 0015 }
 ;PCODE: $0000002A VOL: 0
 ;PCODE: $0000002B VOL: 0
 ;PCODE: $0000002C VOL: 0
-; 0003 0011 }
 ;PCODE: $0000002D VOL: 0
+;void PID_Reset(PID_Controller *p)
+; 0006 0018 {
 ;PCODE: $0000002E VOL: 0
 ;PCODE: $0000002F VOL: 0
+; 0006 0019 p->integral = 0;
 ;PCODE: $00000030 VOL: 0
 ;PCODE: $00000031 VOL: 0
 ;PCODE: $00000032 VOL: 0
+;	*p -> R16,R17
 ;PCODE: $00000033 VOL: 0
-;float PID_Compute(PID_Controller* pid, float current_angle, float dt)
-; 0003 0014 {
 ;PCODE: $00000034 VOL: 0
 ;PCODE: $00000035 VOL: 0
-; 0003 0015 pid->Error = pid->Setpoint - current_angle;
 ;PCODE: $00000036 VOL: 0
+; 0006 001A p->dfilt = 0;
 ;PCODE: $00000037 VOL: 0
 ;PCODE: $00000038 VOL: 0
 ;PCODE: $00000039 VOL: 0
 ;PCODE: $0000003A VOL: 0
-;	*pid -> R16,R17
-;	current_angle -> Y+6
-;	dt -> Y+2
+; 0006 001B p->init = 0;
 ;PCODE: $0000003B VOL: 0
 ;PCODE: $0000003C VOL: 0
 ;PCODE: $0000003D VOL: 0
 ;PCODE: $0000003E VOL: 0
+; 0006 001C }
 ;PCODE: $0000003F VOL: 0
 ;PCODE: $00000040 VOL: 0
 ;PCODE: $00000041 VOL: 0
-; 0003 0016 pid->Integral += pid->Error * dt;
+;int PID_Compute(PID_Controller *p, int meas_cdeg)
+; 0006 001F {
 ;PCODE: $00000042 VOL: 0
 ;PCODE: $00000043 VOL: 0
+; 0006 0020 int  error = p->setpoint_cdeg - meas_cdeg;
+; 0006 0021 int  dmeas;
+; 0006 0022 long pout, iout, dout, out;
+; 0006 0023 
+; 0006 0024 p->integral += error;
 ;PCODE: $00000044 VOL: 0
 ;PCODE: $00000045 VOL: 0
 ;PCODE: $00000046 VOL: 0
 ;PCODE: $00000047 VOL: 0
 ;PCODE: $00000048 VOL: 0
+;	*p -> R20,R21
+;	meas_cdeg -> Y+22
+;	error -> R16,R17
+;	dmeas -> R18,R19
+;	pout -> Y+18
+;	iout -> Y+14
+;	dout -> Y+10
+;	out -> Y+6
 ;PCODE: $00000049 VOL: 0
 ;PCODE: $0000004A VOL: 0
 ;PCODE: $0000004B VOL: 0
@@ -109,8 +121,6 @@
 ;PCODE: $0000004D VOL: 0
 ;PCODE: $0000004E VOL: 0
 ;PCODE: $0000004F VOL: 0
-; 0003 0017 
-; 0003 0018 if (pid->Integral > pid->Integral_Limit) pid->Integral = pid->Integral_Limit;
 ;PCODE: $00000050 VOL: 0
 ;PCODE: $00000051 VOL: 0
 ;PCODE: $00000052 VOL: 0
@@ -121,11 +131,11 @@
 ;PCODE: $00000057 VOL: 0
 ;PCODE: $00000058 VOL: 0
 ;PCODE: $00000059 VOL: 0
+; 0006 0025 if (p->integral >  p->i_limit) p->integral =  p->i_limit;
 ;PCODE: $0000005A VOL: 0
 ;PCODE: $0000005B VOL: 0
 ;PCODE: $0000005C VOL: 0
 ;PCODE: $0000005D VOL: 0
-; 0003 0019 if (pid->Integral < -pid->Integral_Limit) pid->Integral = -pid->Integral_Limit;
 ;PCODE: $0000005E VOL: 0
 ;PCODE: $0000005F VOL: 0
 ;PCODE: $00000060 VOL: 0
@@ -136,6 +146,7 @@
 ;PCODE: $00000065 VOL: 0
 ;PCODE: $00000066 VOL: 0
 ;PCODE: $00000067 VOL: 0
+; 0006 0026 if (p->integral < -p->i_limit) p->integral = -p->i_limit;
 ;PCODE: $00000068 VOL: 0
 ;PCODE: $00000069 VOL: 0
 ;PCODE: $0000006A VOL: 0
@@ -143,8 +154,6 @@
 ;PCODE: $0000006C VOL: 0
 ;PCODE: $0000006D VOL: 0
 ;PCODE: $0000006E VOL: 0
-; 0003 001A 
-; 0003 001B pid->Derivative = (pid->Error - pid->Last_Error) / dt;
 ;PCODE: $0000006F VOL: 0
 ;PCODE: $00000070 VOL: 0
 ;PCODE: $00000071 VOL: 0
@@ -155,10 +164,11 @@
 ;PCODE: $00000076 VOL: 0
 ;PCODE: $00000077 VOL: 0
 ;PCODE: $00000078 VOL: 0
+; 0006 0027 
+; 0006 0028 if (!p->init) { p->prev_meas = meas_cdeg; p->init = 1; }
 ;PCODE: $00000079 VOL: 0
 ;PCODE: $0000007A VOL: 0
 ;PCODE: $0000007B VOL: 0
-; 0003 001C pid->Output = pid->Kp * pid->Error + pid->Ki * pid->Integral + pid->Kd * pid->Derivative;
 ;PCODE: $0000007C VOL: 0
 ;PCODE: $0000007D VOL: 0
 ;PCODE: $0000007E VOL: 0
@@ -168,6 +178,7 @@
 ;PCODE: $00000082 VOL: 0
 ;PCODE: $00000083 VOL: 0
 ;PCODE: $00000084 VOL: 0
+; 0006 0029 dmeas = meas_cdeg - p->prev_meas;
 ;PCODE: $00000085 VOL: 0
 ;PCODE: $00000086 VOL: 0
 ;PCODE: $00000087 VOL: 0
@@ -175,9 +186,11 @@
 ;PCODE: $00000089 VOL: 0
 ;PCODE: $0000008A VOL: 0
 ;PCODE: $0000008B VOL: 0
+; 0006 002A p->prev_meas = meas_cdeg;
 ;PCODE: $0000008C VOL: 0
 ;PCODE: $0000008D VOL: 0
 ;PCODE: $0000008E VOL: 0
+; 0006 002B p->dfilt = (p->dfilt * 3 + dmeas) / 4;          /* low-pass don gian */
 ;PCODE: $0000008F VOL: 0
 ;PCODE: $00000090 VOL: 0
 ;PCODE: $00000091 VOL: 0
@@ -188,11 +201,11 @@
 ;PCODE: $00000096 VOL: 0
 ;PCODE: $00000097 VOL: 0
 ;PCODE: $00000098 VOL: 0
+; 0006 002C 
+; 0006 002D pout =  (long)p->Kp_x10 * error      / 1000L;
 ;PCODE: $00000099 VOL: 0
 ;PCODE: $0000009A VOL: 0
 ;PCODE: $0000009B VOL: 0
-; 0003 001D 
-; 0003 001E if (pid->Output > pid->Output_Limit) pid->Output = pid->Output_Limit;
 ;PCODE: $0000009C VOL: 0
 ;PCODE: $0000009D VOL: 0
 ;PCODE: $0000009E VOL: 0
@@ -201,13 +214,13 @@
 ;PCODE: $000000A1 VOL: 0
 ;PCODE: $000000A2 VOL: 0
 ;PCODE: $000000A3 VOL: 0
+; 0006 002E iout =  (long)p->Ki_x10 * p->integral / 100000L;
 ;PCODE: $000000A4 VOL: 0
 ;PCODE: $000000A5 VOL: 0
 ;PCODE: $000000A6 VOL: 0
 ;PCODE: $000000A7 VOL: 0
 ;PCODE: $000000A8 VOL: 0
 ;PCODE: $000000A9 VOL: 0
-; 0003 001F if (pid->Output < -pid->Output_Limit) pid->Output = -pid->Output_Limit;
 ;PCODE: $000000AA VOL: 0
 ;PCODE: $000000AB VOL: 0
 ;PCODE: $000000AC VOL: 0
@@ -216,6 +229,7 @@
 ;PCODE: $000000AF VOL: 0
 ;PCODE: $000000B0 VOL: 0
 ;PCODE: $000000B1 VOL: 0
+; 0006 002F dout = -(long)p->Kd_x10 * p->dfilt   / 10L;
 ;PCODE: $000000B2 VOL: 0
 ;PCODE: $000000B3 VOL: 0
 ;PCODE: $000000B4 VOL: 0
@@ -225,23 +239,55 @@
 ;PCODE: $000000B8 VOL: 0
 ;PCODE: $000000B9 VOL: 0
 ;PCODE: $000000BA VOL: 0
-; 0003 0020 
-; 0003 0021 pid->Last_Error = pid->Error;
 ;PCODE: $000000BB VOL: 0
 ;PCODE: $000000BC VOL: 0
 ;PCODE: $000000BD VOL: 0
 ;PCODE: $000000BE VOL: 0
 ;PCODE: $000000BF VOL: 0
 ;PCODE: $000000C0 VOL: 0
-; 0003 0022 return pid->Output;
 ;PCODE: $000000C1 VOL: 0
+; 0006 0030 
+; 0006 0031 out = pout + iout + dout;
 ;PCODE: $000000C2 VOL: 0
 ;PCODE: $000000C3 VOL: 0
 ;PCODE: $000000C4 VOL: 0
 ;PCODE: $000000C5 VOL: 0
 ;PCODE: $000000C6 VOL: 0
 ;PCODE: $000000C7 VOL: 0
+; 0006 0032 if (out >  p->out_limit) out =  p->out_limit;
 ;PCODE: $000000C8 VOL: 0
 ;PCODE: $000000C9 VOL: 0
-; 0003 0023 }
 ;PCODE: $000000CA VOL: 0
+;PCODE: $000000CB VOL: 0
+;PCODE: $000000CC VOL: 0
+;PCODE: $000000CD VOL: 0
+;PCODE: $000000CE VOL: 0
+;PCODE: $000000CF VOL: 0
+;PCODE: $000000D0 VOL: 0
+;PCODE: $000000D1 VOL: 0
+;PCODE: $000000D2 VOL: 0
+;PCODE: $000000D3 VOL: 0
+; 0006 0033 if (out < -p->out_limit) out = -p->out_limit;
+;PCODE: $000000D4 VOL: 0
+;PCODE: $000000D5 VOL: 0
+;PCODE: $000000D6 VOL: 0
+;PCODE: $000000D7 VOL: 0
+;PCODE: $000000D8 VOL: 0
+;PCODE: $000000D9 VOL: 0
+;PCODE: $000000DA VOL: 0
+;PCODE: $000000DB VOL: 0
+;PCODE: $000000DC VOL: 0
+;PCODE: $000000DD VOL: 0
+;PCODE: $000000DE VOL: 0
+;PCODE: $000000DF VOL: 0
+;PCODE: $000000E0 VOL: 0
+;PCODE: $000000E1 VOL: 0
+;PCODE: $000000E2 VOL: 0
+; 0006 0034 return (int)out;
+;PCODE: $000000E3 VOL: 0
+;PCODE: $000000E4 VOL: 0
+;PCODE: $000000E5 VOL: 0
+;PCODE: $000000E6 VOL: 0
+;PCODE: $000000E7 VOL: 0
+; 0006 0035 }
+;PCODE: $000000E8 VOL: 0

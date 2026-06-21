@@ -1,17 +1,204 @@
-/*
- * Self_Balancing_Rover.c
- *
- * Created: 6/15/2026 9:01:34 PM
- * Author: Administrator
- */
+/*============================================================================
+  Self_Balancing_Rover.c  -  main
+  ATmega328P @16MHz - CodeVisionAVR
 
+  Vong dieu khien chay tai 100 Hz nho Timer2 (CTC). Moi tick:
+     doc MPU -> loc bu -> PID -> set motor (kem safety cutoff).
+  Telemetry + live-tune qua UART (38400 8N1).
+
+  Live-tune (go vao Serial Monitor, ket thuc bang Enter):
+     P 200  -> Kp = 20.0      (gia tri = so/10)
+     I 5    -> Ki = 0.5
+     D 8    -> Kd = 0.8
+     S -15  -> setpoint = -1.5 deg
+     ?      -> in cac he so hien tai
+============================================================================*/
 #include <mega328p.h>
+#include <stdint.h>
+#include <delay.h>
+#include "config.h"
+#include "uart.h"
+#include "myi2c.h"
+#include "mpu6050.h"
+#include "filter.h"
+#include "motor.h"
+#include "pid.h"
+
+volatile unsigned char g_tick = 0;     /* dat boi Timer2 @100Hz */
+
+MPU6050_Data   imu;
+CompFilter     filt;
+PID_Controller pid;
+
+/* ---- on-board LED = PB5 (D13) ---- */
+#define LED_ON()   (PORTB |=  (1 << 5))
+#define LED_OFF()  (PORTB &= ~(1 << 5))
+#define LED_TGL()  (PORTB ^=  (1 << 5))
+
+static void timer2_init_100hz(void)
+{
+    /* CTC mode (WGM21=1), prescaler 1024, OCR2A=155
+       f = F_CPU/(1024*(155+1)) = 100.16 Hz */
+    TCCR2A = (1 << WGM21);
+    TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
+    OCR2A  = 155;
+    TIMSK2 = (1 << OCIE2A);
+}
+
+/* ---- live-tune: doc lenh "X <so>\n" tu UART, khong chan vong lap ---- */
+static void poll_uart_tuning(void)
+{
+    static char          line[16];
+    static unsigned char idx = 0;
+    char c;
+
+    while (uart_available())
+    {
+        c = uart_get();
+        if (c == '\r') continue;
+
+        if (c == '\n')
+        {
+            line[idx] = 0;
+            if (idx >= 1)
+            {
+                char          cmd = line[0];
+                long          val = 0;
+                unsigned char i   = 1;
+                unsigned char neg = 0;
+
+                while (line[i] == ' ') i++;
+                if (line[i] == '-') { neg = 1; i++; }
+                while (line[i] >= '0' && line[i] <= '9')
+                    { val = val * 10 + (line[i] - '0'); i++; }
+                if (neg) val = -val;
+
+                switch (cmd)
+                {
+                    case 'P': case 'p': pid.Kp = val / 10.0f; break;
+                    case 'I': case 'i': pid.Ki = val / 10.0f; break;
+                    case 'D': case 'd': pid.Kd = val / 10.0f; break;
+                    case 'S': case 's': pid.setpoint = val / 10.0f; break;
+                    case '?':
+                        uart_puts("Kp*10="); uart_put_int((long)(pid.Kp * 10));
+                        uart_puts(" Ki*10="); uart_put_int((long)(pid.Ki * 10));
+                        uart_puts(" Kd*10="); uart_put_int((long)(pid.Kd * 10));
+                        uart_puts(" Sp*10="); uart_put_int((long)(pid.setpoint * 10));
+                        uart_puts("\r\n");
+                        break;
+                    default: break;
+                }
+            }
+            idx = 0;
+        }
+        else if (idx < sizeof(line) - 1)
+        {
+            line[idx++] = c;
+        }
+    }
+}
 
 void main(void)
 {
-while (1)
-    {
-    // Please write your application code here
+    float         angle;
+    int           out;
+    unsigned char fallen = 0;
+    unsigned char tel    = 0;
 
+    DDRB |= (1 << 5);          /* LED */
+    uart_init();
+    Motor_Init();
+    Motor_Stop();
+
+    uart_puts("\r\nBOOT...\r\n");
+
+    if (MPU6050_Init())
+    {
+        uart_puts("MPU OK, WHO_AM_I=0x");
+        uart_put_int((long)MPU6050_WhoAmI());   /* in dang decimal cho gon  */
+        uart_puts(" (0x68=MPU6050, 112=0x70=MPU6500 clone - deu OK)\r\n");
     }
+    else
+    {
+        uart_puts("MPU NOT FOUND - check wiring!\r\n");
+        while (1) { LED_TGL(); delay_ms(120); }    /* nhay nhanh = loi sensor */
+    }
+
+    uart_puts("Calibrating gyro - GIU XE YEN ~2s...\r\n");
+    LED_ON();
+    MPU6050_CalibrateGyro();
+    LED_OFF();
+    uart_puts("Calib done\r\n");
+
+    Filter_Init(&filt, COMP_ALPHA);
+    PID_Init(&pid, PID_KP_INIT, PID_KI_INIT, PID_KD_INIT,
+             PID_I_LIMIT, PID_OUT_LIMIT, PID_SETPOINT_INIT);
+
+    timer2_init_100hz();
+    #asm("sei")
+
+    uart_puts("BOOT OK\r\n");
+
+#if DEBUG_SENSOR_CHECK
+    /* ---- Che do kiem tra cam bien: stream raw, MOTOR TAT ---- */
+    while (1)
+    {
+        if (g_tick)
+        {
+            g_tick = 0;
+            MPU6050_Read(&imu);
+            uart_puts("ax=");  uart_put_int(imu.ax);
+            uart_puts(" ay="); uart_put_int(imu.ay);
+            uart_puts(" az="); uart_put_int(imu.az);
+            uart_puts(" gx="); uart_put_int(imu.gx);
+            uart_puts(" gy="); uart_put_int(imu.gy);
+            uart_puts(" gz="); uart_put_int(imu.gz);
+            uart_puts(" ang*10="); uart_put_int((long)(imu.angle_acc * 10));
+            uart_puts("\r\n");
+            LED_TGL();
+        }
+    }
+#else
+    /* ---- Firmware can bang ---- */
+    while (1)
+    {
+        poll_uart_tuning();
+
+        if (g_tick)
+        {
+            g_tick = 0;
+            out = 0;
+
+            MPU6050_Read(&imu);
+            angle = Filter_Update(&filt, imu.angle_acc, imu.gyro_rate, SAMPLE_DT);
+
+            if (angle > FALL_ANGLE || angle < -FALL_ANGLE)
+            {
+                if (!fallen) { Motor_Stop(); PID_Reset(&pid); fallen = 1; }
+                LED_ON();                              /* sang lien = da nga */
+            }
+            else
+            {
+                fallen = 0;
+                out = (int)(OUTPUT_SIGN * PID_Compute(&pid, angle, SAMPLE_DT));
+                Motor_SetDuty(out, out);
+            }
+
+            /* telemetry ~20Hz de khong nghen UART */
+            if (++tel >= 5)
+            {
+                tel = 0;
+                LED_TGL();
+                uart_puts("a="); uart_put_int((long)(angle * 10));   /* deg*10 */
+                uart_puts(" o="); uart_put_int(out);
+                uart_puts("\r\n");
+            }
+        }
+    }
+#endif
+}
+
+interrupt [TIM2_COMPA] void timer2_compa_isr(void)
+{
+    g_tick = 1;
 }

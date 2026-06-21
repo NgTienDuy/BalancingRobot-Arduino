@@ -1,12 +1,12 @@
 
-;CodeVisionAVR C Compiler V4.07 Evaluation
-;(C) Copyright 1998-2026 Pavel Haiduc, HP InfoTech S.R.L.
+;CodeVisionAVR C Compiler V4.06a 
+;(C) Copyright 1998-2025 Pavel Haiduc, HP InfoTech S.R.L.
 ;http://www.hpinfotech.ro
 
 ;Build configuration    : Debug
 ;Chip type              : ATmega328P
 ;Program type           : Application
-;Clock frequency        : 8.000000 MHz
+;Clock frequency        : 16.000000 MHz
 ;Memory model           : Small
 ;Optimize for           : Size
 ;(s)printf features     : int, width
@@ -1434,6 +1434,7 @@ __START_OF_CODE:
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
+	JMP  _timer2_compa_isr
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
@@ -1443,7 +1444,6 @@ __START_OF_CODE:
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
-	JMP  _timer0_ovf_isr
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
@@ -1454,8 +1454,35 @@ __START_OF_CODE:
 	JMP  0x00
 	JMP  0x00
 
-_0x40011:
-	.DB  0x8F,0xC2,0x75,0x3F
+_0x0:
+	.DB  0x4B,0x70,0x2A,0x31,0x30,0x3D,0x0,0x20
+	.DB  0x4B,0x69,0x2A,0x31,0x30,0x3D,0x0,0x20
+	.DB  0x4B,0x64,0x2A,0x31,0x30,0x3D,0x0,0x20
+	.DB  0x53,0x70,0x2A,0x31,0x30,0x3D,0x0,0xD
+	.DB  0xA,0x0,0xD,0xA,0x42,0x4F,0x4F,0x54
+	.DB  0x2E,0x2E,0x2E,0xD,0xA,0x0,0x4D,0x50
+	.DB  0x55,0x20,0x4F,0x4B,0x2C,0x20,0x57,0x48
+	.DB  0x4F,0x5F,0x41,0x4D,0x5F,0x49,0x3D,0x30
+	.DB  0x78,0x0,0x20,0x28,0x30,0x78,0x36,0x38
+	.DB  0x3D,0x4D,0x50,0x55,0x36,0x30,0x35,0x30
+	.DB  0x2C,0x20,0x31,0x31,0x32,0x3D,0x30,0x78
+	.DB  0x37,0x30,0x3D,0x4D,0x50,0x55,0x36,0x35
+	.DB  0x30,0x30,0x20,0x63,0x6C,0x6F,0x6E,0x65
+	.DB  0x20,0x2D,0x20,0x64,0x65,0x75,0x20,0x4F
+	.DB  0x4B,0x29,0xD,0xA,0x0,0x4D,0x50,0x55
+	.DB  0x20,0x4E,0x4F,0x54,0x20,0x46,0x4F,0x55
+	.DB  0x4E,0x44,0x20,0x2D,0x20,0x63,0x68,0x65
+	.DB  0x63,0x6B,0x20,0x77,0x69,0x72,0x69,0x6E
+	.DB  0x67,0x21,0xD,0xA,0x0,0x43,0x61,0x6C
+	.DB  0x69,0x62,0x72,0x61,0x74,0x69,0x6E,0x67
+	.DB  0x20,0x67,0x79,0x72,0x6F,0x20,0x2D,0x20
+	.DB  0x47,0x49,0x55,0x20,0x58,0x45,0x20,0x59
+	.DB  0x45,0x4E,0x20,0x7E,0x32,0x73,0x2E,0x2E
+	.DB  0x2E,0xD,0xA,0x0,0x43,0x61,0x6C,0x69
+	.DB  0x62,0x20,0x64,0x6F,0x6E,0x65,0xD,0xA
+	.DB  0x0,0x42,0x4F,0x4F,0x54,0x20,0x4F,0x4B
+	.DB  0xD,0xA,0x0,0x61,0x3D,0x0,0x20,0x6F
+	.DB  0x3D,0x0
 _0x2020060:
 	.DB  0x1
 _0x2020000:
@@ -1463,9 +1490,65 @@ _0x2020000:
 	.DB  0x0
 
 __GLOBAL_INI_TBL:
+	.DW  0x07
+	.DW  _0x23
+	.DW  _0x0*2
+
+	.DW  0x08
+	.DW  _0x23+7
+	.DW  _0x0*2+7
+
+	.DW  0x08
+	.DW  _0x23+15
+	.DW  _0x0*2+15
+
+	.DW  0x08
+	.DW  _0x23+23
+	.DW  _0x0*2+23
+
+	.DW  0x03
+	.DW  _0x23+31
+	.DW  _0x0*2+31
+
+	.DW  0x0C
+	.DW  _0x27
+	.DW  _0x0*2+34
+
+	.DW  0x14
+	.DW  _0x27+12
+	.DW  _0x0*2+46
+
+	.DW  0x33
+	.DW  _0x27+32
+	.DW  _0x0*2+66
+
+	.DW  0x20
+	.DW  _0x27+83
+	.DW  _0x0*2+117
+
+	.DW  0x27
+	.DW  _0x27+115
+	.DW  _0x0*2+149
+
+	.DW  0x0D
+	.DW  _0x27+154
+	.DW  _0x0*2+188
+
+	.DW  0x0A
+	.DW  _0x27+167
+	.DW  _0x0*2+201
+
+	.DW  0x03
+	.DW  _0x27+177
+	.DW  _0x0*2+211
+
 	.DW  0x04
-	.DW  _g_alpha_G002
-	.DW  _0x40011*2
+	.DW  _0x27+180
+	.DW  _0x0*2+214
+
+	.DW  0x03
+	.DW  _0x27+184
+	.DW  _0x0*2+31
 
 	.DW  0x01
 	.DW  __seed_G101
@@ -1564,988 +1647,957 @@ __GLOBAL_INI_END:
 	.EQU __sm_ext_standby=0x0E
 	.SET power_ctrl_reg=smcr
 	#endif
-;void Init_System(void)
-; 0000 0011 {
+;static void timer2_init_100hz(void)
+; 0000 0027 {
 
 	.CSEG
-_Init_System:
-; .FSTART _Init_System
-; 0000 0012 // Configure Timer0 for a fixed 10 ms sampling tick.
-; 0000 0013 TCCR0B = (1 << CS02) | (1 << CS00);   // prescaler 1024
-	LDI  R30,LOW(5)
-	OUT  0x25,R30
-; 0000 0014 TCNT0 = 0;
-	LDI  R30,LOW(0)
-	OUT  0x26,R30
-; 0000 0015 TIMSK0 = (1 << TOIE0);
-	LDI  R30,LOW(1)
-	STS  110,R30
-; 0000 0016 
-; 0000 0017 // Enable global interrupts
-; 0000 0018 #asm("sei")
-	SEI
-; 0000 0019 
-; 0000 001A // Initialize modules
-; 0000 001B MPU6050_Init();
-	RCALL _MPU6050_Init
-; 0000 001C Motor_Init();
-	RCALL _Motor_Init
-; 0000 001D 
-; 0000 001E // Default PID parameters (start values only - tune on real hardware)
-; 0000 001F // These are safe initial values for a small rover platform.
-; 0000 0020 PID_Init(&g_pid, 18.0f, 0.0f, 4.0f, 0.0f, 255.0f, 255.0f);
-	RCALL SUBOPT_0x0
-	__GETD1N 0x41900000
-	RCALL SUBOPT_0x1
-	__GETD1N 0x40800000
-	RCALL SUBOPT_0x1
-	__GETD1N 0x437F0000
-	RCALL __PUTPARD1
-	__GETD2N 0x437F0000
-	RCALL _PID_Init
-; 0000 0021 g_pid.Setpoint = 0.0f;
-	RCALL SUBOPT_0x2
-	__PUTD1MN _g_pid,28
-; 0000 0022 }
+_timer2_init_100hz_G000:
+; .FSTART _timer2_init_100hz_G000
+; 0000 0028 /* CTC mode (WGM21=1), prescaler 1024, OCR2A=155
+; 0000 0029 f = F_CPU/(1024*(155+1)) = 100.16 Hz */
+; 0000 002A TCCR2A = (1 << WGM21);
+	LDI  R30,LOW(2)
+	STS  176,R30
+; 0000 002B TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
+	LDI  R30,LOW(7)
+	STS  177,R30
+; 0000 002C OCR2A  = 155;
+	LDI  R30,LOW(155)
+	STS  179,R30
+; 0000 002D TIMSK2 = (1 << OCIE2A);
+	LDI  R30,LOW(2)
+	STS  112,R30
+; 0000 002E }
 	RET
 ; .FEND
-;void main(void)
-; 0000 0025 {
-_main:
-; .FSTART _main
-; 0000 0026 MPU6050_Data imu;
-; 0000 0027 float pitch = 0.0f;
-; 0000 0028 int output = 0;
-; 0000 0029 
-; 0000 002A Init_System();
-	SBIW R28,28
+;static void poll_uart_tuning(void)
+; 0000 0032 {
+_poll_uart_tuning_G000:
+; .FSTART _poll_uart_tuning_G000
+; 0000 0033 static char          line[16];
+; 0000 0034 static unsigned char idx = 0;
+; 0000 0035 char c;
+; 0000 0036 
+; 0000 0037 while (uart_available())
+	ST   -Y,R17
+;	c -> R17
+_0x3:
+	RCALL _uart_available
+	CPI  R30,0
+	BRNE PC+2
+	RJMP _0x5
+; 0000 0038 {
+; 0000 0039 c = uart_get();
+	RCALL _uart_get
+	MOV  R17,R30
+; 0000 003A if (c == '\r') continue;
+	CPI  R17,13
+	BREQ _0x3
+; 0000 003B 
+; 0000 003C if (c == '\n')
+	CPI  R17,10
+	BREQ PC+2
+	RJMP _0x7
+; 0000 003D {
+; 0000 003E line[idx] = 0;
+	LDS  R30,_idx_S0000001000
+	LDI  R31,0
+	SUBI R30,LOW(-_line_S0000001000)
+	SBCI R31,HIGH(-_line_S0000001000)
+	LDI  R26,LOW(0)
+	STD  Z+0,R26
+; 0000 003F if (idx >= 1)
+	LDS  R26,_idx_S0000001000
+	CPI  R26,LOW(0x1)
+	BRSH PC+2
+	RJMP _0x8
+; 0000 0040 {
+; 0000 0041 char          cmd = line[0];
+; 0000 0042 long          val = 0;
+; 0000 0043 unsigned char i   = 1;
+; 0000 0044 unsigned char neg = 0;
+; 0000 0045 
+; 0000 0046 while (line[i] == ' ') i++;
+	SBIW R28,7
 	LDI  R30,LOW(0)
 	ST   Y,R30
+	LDI  R30,LOW(1)
 	STD  Y+1,R30
+	LDI  R30,LOW(0)
 	STD  Y+2,R30
 	STD  Y+3,R30
-;	imu -> Y+4
-;	pitch -> Y+0
-;	output -> R16,R17
-	__GETWRN 16,17,0
-	RCALL _Init_System
-; 0000 002B 
-; 0000 002C while (1)
-_0x3:
-; 0000 002D {
-; 0000 002E if (g_flag_compute)
-	LDS  R30,_g_flag_compute
-	CPI  R30,0
-	BREQ _0x6
-; 0000 002F {
-; 0000 0030 g_flag_compute = 0;
-	LDI  R30,LOW(0)
-	STS  _g_flag_compute,R30
-; 0000 0031 
-; 0000 0032 MPU6050_Read_Raw(&imu, SAMPLE_DT);
-	MOVW R30,R28
-	ADIW R30,4
-	ST   -Y,R31
-	ST   -Y,R30
-	RCALL SUBOPT_0x3
-	RCALL _MPU6050_Read_Raw
-; 0000 0033 
-; 0000 0034 // Simple complementary-filter style estimate
-; 0000 0035 // (The actual angle filter is implemented in mpu6050.c for reuse)
-; 0000 0036 pitch = imu.angle_filtered;
-	__GETD1S 24
-	RCALL SUBOPT_0x4
-; 0000 0037 
-; 0000 0038 output = (int)PID_Compute(&g_pid, pitch, SAMPLE_DT);
+	STD  Y+4,R30
+	STD  Y+5,R30
+;	cmd -> Y+6
+;	val -> Y+2
+;	i -> Y+1
+;	neg -> Y+0
+	LDS  R30,_line_S0000001000
+	STD  Y+6,R30
+_0x9:
 	RCALL SUBOPT_0x0
-	RCALL SUBOPT_0x5
-	RCALL __PUTPARD1
-	RCALL SUBOPT_0x3
-	RCALL _PID_Compute
-	RCALL __CFD1
-	MOVW R16,R30
-; 0000 0039 Motor_Control(output, output);
-	ST   -Y,R17
-	ST   -Y,R16
-	MOVW R26,R16
-	RCALL _Motor_Control
-; 0000 003A }
-; 0000 003B }
-_0x6:
-	RJMP _0x3
-; 0000 003C }
-_0x7:
-	RJMP _0x7
-; .FEND
-;interrupt [17] void timer0_ovf_isr(void)
-; 0000 003F {
-_timer0_ovf_isr:
-; .FSTART _timer0_ovf_isr
-	ST   -Y,R26
-	ST   -Y,R30
-	IN   R30,SREG
-	ST   -Y,R30
-; 0000 0040 static unsigned char counter = 0;
-; 0000 0041 
-; 0000 0042 TCNT0 = 0;
-	LDI  R30,LOW(0)
-	OUT  0x26,R30
-; 0000 0043 counter++;
-	LDS  R30,_counter_S0000002000
+	CPI  R26,LOW(0x20)
+	BRNE _0xB
+	LDD  R30,Y+1
 	SUBI R30,-LOW(1)
-	STS  _counter_S0000002000,R30
-; 0000 0044 
-; 0000 0045 if (counter >= 1)
-	LDS  R26,_counter_S0000002000
-	CPI  R26,LOW(0x1)
-	BRLO _0x8
-; 0000 0046 {
-; 0000 0047 counter = 0;
-	LDI  R30,LOW(0)
-	STS  _counter_S0000002000,R30
-; 0000 0048 g_flag_compute = 1;
+	STD  Y+1,R30
+	RJMP _0x9
+_0xB:
+; 0000 0047 if (line[i] == '-') { neg = 1; i++; }
+	RCALL SUBOPT_0x0
+	CPI  R26,LOW(0x2D)
+	BRNE _0xC
 	LDI  R30,LOW(1)
-	STS  _g_flag_compute,R30
-; 0000 0049 }
-; 0000 004A }
-_0x8:
-	LD   R30,Y+
-	OUT  SREG,R30
-	LD   R30,Y+
-	LD   R26,Y+
-	RETI
-; .FEND
-	#ifndef __SLEEP_DEFINED__
-	#define __SLEEP_DEFINED__
-	.EQU __se_bit=0x01
-	.EQU __sm_mask=0x0E
-	.EQU __sm_adc_noise_red=0x02
-	.EQU __sm_powerdown=0x04
-	.EQU __sm_powersave=0x06
-	.EQU __sm_standby=0x0C
-	.EQU __sm_ext_standby=0x0E
-	.SET power_ctrl_reg=smcr
-	#endif
-;static unsigned int Motor_PwmValue(int speed)
-; 0001 0005 {
-
-	.CSEG
-_Motor_PwmValue_G001:
-; .FSTART _Motor_PwmValue_G001
-; 0001 0006 if (speed < 0)
-	ST   -Y,R17
-	ST   -Y,R16
-	MOVW R16,R26
-;	speed -> R16,R17
-	TST  R17
-	BRPL _0x20003
-; 0001 0007 speed = -speed;
-	MOVW R30,R16
-	RCALL __ANEGW1
-	MOVW R16,R30
-; 0001 0008 if (speed > 255)
-_0x20003:
-	__CPWRN 16,17,256
-	BRLT _0x20004
-; 0001 0009 speed = 255;
-	__GETWRN 16,17,255
-; 0001 000A return (unsigned int)speed;
-_0x20004:
-	MOVW R30,R16
-	RJMP _0x2080003
-; 0001 000B }
-; .FEND
-;static void Set_Left_Speed(int speed)
-; 0001 000E {
-_Set_Left_Speed_G001:
-; .FSTART _Set_Left_Speed_G001
-; 0001 000F unsigned int duty = Motor_PwmValue(speed);
-; 0001 0010 
-; 0001 0011 if (speed >= 0)
-	RCALL SUBOPT_0x6
-;	speed -> Y+2
-;	duty -> R16,R17
-	BRMI _0x20005
-; 0001 0012 {
-; 0001 0013 PORTD.2 = 1;
-	SBI  0xB,2
-; 0001 0014 PORTD.3 = 0;
-	CBI  0xB,3
-; 0001 0015 }
-; 0001 0016 else
-	RJMP _0x2000A
-_0x20005:
-; 0001 0017 {
-; 0001 0018 PORTD.2 = 0;
-	CBI  0xB,2
-; 0001 0019 PORTD.3 = 1;
-	SBI  0xB,3
-; 0001 001A }
-_0x2000A:
-; 0001 001B 
-; 0001 001C OCR1AL = (unsigned char)duty;
-	STS  136,R16
-; 0001 001D OCR1AH = (unsigned char)(duty >> 8);
-	STS  137,R17
-; 0001 001E }
-	LDD  R17,Y+1
-	LDD  R16,Y+0
-	RJMP _0x2080002
-; .FEND
-;static void Set_Right_Speed(int speed)
-; 0001 0021 {
-_Set_Right_Speed_G001:
-; .FSTART _Set_Right_Speed_G001
-; 0001 0022 unsigned int duty = Motor_PwmValue(speed);
-; 0001 0023 
-; 0001 0024 if (speed >= 0)
-	RCALL SUBOPT_0x6
-;	speed -> Y+2
-;	duty -> R16,R17
-	BRMI _0x2000F
-; 0001 0025 {
-; 0001 0026 PORTD.4 = 1;
-	SBI  0xB,4
-; 0001 0027 PORTD.5 = 0;
-	CBI  0xB,5
-; 0001 0028 }
-; 0001 0029 else
-	RJMP _0x20014
-_0x2000F:
-; 0001 002A {
-; 0001 002B PORTD.4 = 0;
-	CBI  0xB,4
-; 0001 002C PORTD.5 = 1;
-	SBI  0xB,5
-; 0001 002D }
-_0x20014:
-; 0001 002E 
-; 0001 002F OCR1BL = (unsigned char)duty;
-	STS  138,R16
-; 0001 0030 OCR1BH = (unsigned char)(duty >> 8);
-	STS  139,R17
-; 0001 0031 }
-	LDD  R17,Y+1
-	LDD  R16,Y+0
-	RJMP _0x2080002
-; .FEND
-;void Motor_Init(void)
-; 0001 0034 {
-_Motor_Init:
-; .FSTART _Motor_Init
-; 0001 0035 DDRD.2 = 1;
-	SBI  0xA,2
-; 0001 0036 DDRD.3 = 1;
-	SBI  0xA,3
-; 0001 0037 DDRD.4 = 1;
-	SBI  0xA,4
-; 0001 0038 DDRD.5 = 1;
-	SBI  0xA,5
-; 0001 0039 DDRB.1 = 1;
-	SBI  0x4,1
-; 0001 003A DDRB.2 = 1;
-	SBI  0x4,2
-; 0001 003B 
-; 0001 003C TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM10);
-	LDI  R30,LOW(161)
-	STS  128,R30
-; 0001 003D TCCR1B = (1 << CS10) | (1 << WGM12);
-	LDI  R30,LOW(9)
-	STS  129,R30
-; 0001 003E OCR1AL = 0;
-	LDI  R30,LOW(0)
-	STS  136,R30
-; 0001 003F OCR1AH = 0;
-	STS  137,R30
-; 0001 0040 OCR1BL = 0;
-	STS  138,R30
-; 0001 0041 OCR1BH = 0;
-	STS  139,R30
-; 0001 0042 }
-	RET
-; .FEND
-;void Motor_Control(int speed_left, int speed_right)
-; 0001 0045 {
-_Motor_Control:
-; .FSTART _Motor_Control
-; 0001 0046 if (speed_left > 255) speed_left = 255;
-	RCALL __SAVELOCR4
-	MOVW R16,R26
-	__GETWRS 18,19,4
-;	speed_left -> R18,R19
-;	speed_right -> R16,R17
-	__CPWRN 18,19,256
-	BRLT _0x20025
-	__GETWRN 18,19,255
-; 0001 0047 if (speed_left < -255) speed_left = -255;
-_0x20025:
-	__CPWRN 18,19,65281
-	BRGE _0x20026
-	__GETWRN 18,19,65281
-; 0001 0048 if (speed_right > 255) speed_right = 255;
-_0x20026:
-	__CPWRN 16,17,256
-	BRLT _0x20027
-	__GETWRN 16,17,255
-; 0001 0049 if (speed_right < -255) speed_right = -255;
-_0x20027:
-	__CPWRN 16,17,65281
-	BRGE _0x20028
-	__GETWRN 16,17,65281
-; 0001 004A 
-; 0001 004B Set_Left_Speed(speed_left);
-_0x20028:
-	MOVW R26,R18
-	RCALL _Set_Left_Speed_G001
-; 0001 004C Set_Right_Speed(speed_right);
-	MOVW R26,R16
-	RCALL _Set_Right_Speed_G001
-; 0001 004D }
-	RCALL __LOADLOCR4
-	ADIW R28,6
-	RET
-; .FEND
-	#ifndef __SLEEP_DEFINED__
-	#define __SLEEP_DEFINED__
-	.EQU __se_bit=0x01
-	.EQU __sm_mask=0x0E
-	.EQU __sm_adc_noise_red=0x02
-	.EQU __sm_powerdown=0x04
-	.EQU __sm_powersave=0x06
-	.EQU __sm_standby=0x0C
-	.EQU __sm_ext_standby=0x0E
-	.SET power_ctrl_reg=smcr
-	#endif
-;static void i2c_delay(void)
-; 0002 0016 {
-
-	.CSEG
-_i2c_delay_G002:
-; .FSTART _i2c_delay_G002
-; 0002 0017 // ~5 us at 8 MHz (rough tuning for 100 kHz I2C)
-; 0002 0018 unsigned char i;
-; 0002 0019 for (i = 0; i < 3; i++) {
-	ST   -Y,R17
-;	i -> R17
-	LDI  R17,LOW(0)
-_0x40004:
-	CPI  R17,3
-	BRSH _0x40005
-; 0002 001A #asm("nop");
-	NOP
-; 0002 001B }
-	SUBI R17,-1
-	RJMP _0x40004
-_0x40005:
-; 0002 001C }
-	LD   R17,Y+
-	RET
-; .FEND
-;static void i2c_init(void)
-; 0002 001F {
-_i2c_init_G002:
-; .FSTART _i2c_init_G002
-; 0002 0020 SDA_HIGH();
-	CBI  0x7,4
-; 0002 0021 SCL_HIGH();
-	CBI  0x7,5
-; 0002 0022 }
-	RET
-; .FEND
-;static unsigned char i2c_start(void)
-; 0002 0025 {
-_i2c_start_G002:
-; .FSTART _i2c_start_G002
-; 0002 0026 SDA_HIGH();
-	CBI  0x7,4
-; 0002 0027 SCL_HIGH();
-	CBI  0x7,5
-; 0002 0028 i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 0029 SDA_LOW();
-	SBI  0x7,4
-; 0002 002A i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 002B SCL_LOW();
-	SBI  0x7,5
-; 0002 002C i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 002D return 1; // success
-	LDI  R30,LOW(1)
-	RET
-; 0002 002E }
-; .FEND
-;static void i2c_stop(void)
-; 0002 0031 {
-_i2c_stop_G002:
-; .FSTART _i2c_stop_G002
-; 0002 0032 SDA_LOW();
-	SBI  0x7,4
-; 0002 0033 SCL_HIGH();
-	CBI  0x7,5
-; 0002 0034 i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 0035 SDA_HIGH();
-	CBI  0x7,4
-; 0002 0036 i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 0037 }
-	RET
-; .FEND
-;static unsigned char i2c_write(unsigned char data)
-; 0002 003A {
-_i2c_write_G002:
-; .FSTART _i2c_write_G002
-; 0002 003B unsigned char i;
-; 0002 003C for (i = 0; i < 8; i++)
-	ST   -Y,R17
-	ST   -Y,R16
-	MOV  R16,R26
-;	data -> R16
-;	i -> R17
-	LDI  R17,LOW(0)
-_0x40007:
-	CPI  R17,8
-	BRSH _0x40008
-; 0002 003D {
-; 0002 003E if (data & 0x80)
-	SBRS R16,7
-	RJMP _0x40009
-; 0002 003F SDA_HIGH();
-	CBI  0x7,4
-; 0002 0040 else
-	RJMP _0x4000A
-_0x40009:
-; 0002 0041 SDA_LOW();
-	SBI  0x7,4
-; 0002 0042 data <<= 1;
-_0x4000A:
-	LSL  R16
-; 0002 0043 i2c_delay();
-	RCALL SUBOPT_0x7
-; 0002 0044 SCL_HIGH();
-; 0002 0045 i2c_delay();
-; 0002 0046 SCL_LOW();
-; 0002 0047 i2c_delay();
-; 0002 0048 }
-	SUBI R17,-1
-	RJMP _0x40007
-_0x40008:
-; 0002 0049 // Release SDA for ACK, read ACK bit
-; 0002 004A SDA_HIGH();
-	CBI  0x7,4
-; 0002 004B i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 004C SCL_HIGH();
-	CBI  0x7,5
-; 0002 004D i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 004E {
-; 0002 004F unsigned char ack = SDA_IN() == 0;
-; 0002 0050 SCL_LOW();
-	SBIW R28,1
-;	ack -> Y+0
-	IN   R30,0x6
-	ANDI R30,LOW(0x10)
-	LDI  R26,LOW(0)
-	__EQB12
 	ST   Y,R30
-	SBI  0x7,5
-; 0002 0051 i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 0052 return ack;
+	LDD  R30,Y+1
+	SUBI R30,-LOW(1)
+	STD  Y+1,R30
+; 0000 0048 while (line[i] >= '0' && line[i] <= '9')
+_0xC:
+_0xD:
+	RCALL SUBOPT_0x0
+	CPI  R26,LOW(0x30)
+	BRLO _0x10
+	LD   R26,Z
+	CPI  R26,LOW(0x3A)
+	BRLO _0x11
+_0x10:
+	RJMP _0xF
+_0x11:
+; 0000 0049 { val = val * 10 + (line[i] - '0'); i++; }
+	RCALL SUBOPT_0x1
+	__GETD2N 0xA
+	RCALL __MULD12
+	MOVW R26,R30
+	MOVW R24,R22
+	LDD  R30,Y+1
+	LDI  R31,0
+	SUBI R30,LOW(-_line_S0000001000)
+	SBCI R31,HIGH(-_line_S0000001000)
+	LD   R30,Z
+	LDI  R31,0
+	SBIW R30,48
+	RCALL SUBOPT_0x2
+	RCALL SUBOPT_0x3
+	LDD  R30,Y+1
+	SUBI R30,-LOW(1)
+	STD  Y+1,R30
+	RJMP _0xD
+_0xF:
+; 0000 004A if (neg) val = -val;
 	LD   R30,Y
-	ADIW R28,1
-_0x2080003:
-	LD   R16,Y+
-	LD   R17,Y+
-	RET
-; 0002 0053 }
-	ADIW R28,1
-; 0002 0054 }
-; .FEND
-;static unsigned char i2c_read(unsigned char ack)
-; 0002 0057 {
-_i2c_read_G002:
-; .FSTART _i2c_read_G002
-; 0002 0058 unsigned char i, data = 0;
-; 0002 0059 SDA_HIGH();
-	RCALL __SAVELOCR4
-	MOV  R19,R26
-;	ack -> R19
-;	i -> R17
-;	data -> R16
-	LDI  R16,0
-	CBI  0x7,4
-; 0002 005A for (i = 0; i < 8; i++)
-	LDI  R17,LOW(0)
-_0x4000C:
-	CPI  R17,8
-	BRSH _0x4000D
-; 0002 005B {
-; 0002 005C data <<= 1;
-	LSL  R16
-; 0002 005D SCL_HIGH();
-	CBI  0x7,5
-; 0002 005E i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 005F if (SDA_IN())
-	SBIC 0x6,4
-; 0002 0060 data |= 1;
-	ORI  R16,LOW(1)
-; 0002 0061 SCL_LOW();
-	SBI  0x7,5
-; 0002 0062 i2c_delay();
-	RCALL _i2c_delay_G002
-; 0002 0063 }
-	SUBI R17,-1
-	RJMP _0x4000C
-_0x4000D:
-; 0002 0064 // Send ACK/NACK
-; 0002 0065 if (ack)
-	CPI  R19,0
-	BREQ _0x4000F
-; 0002 0066 SDA_LOW();
-	SBI  0x7,4
-; 0002 0067 else
-	RJMP _0x40010
-_0x4000F:
-; 0002 0068 SDA_HIGH();
-	CBI  0x7,4
-; 0002 0069 i2c_delay();
-_0x40010:
-	RCALL SUBOPT_0x7
-; 0002 006A SCL_HIGH();
-; 0002 006B i2c_delay();
-; 0002 006C SCL_LOW();
-; 0002 006D i2c_delay();
-; 0002 006E SDA_HIGH();
-	CBI  0x7,4
-; 0002 006F return data;
-	MOV  R30,R16
-	RCALL __LOADLOCR4
-	RJMP _0x2080002
-; 0002 0070 }
+	CPI  R30,0
+	BREQ _0x12
+	RCALL SUBOPT_0x1
+	RCALL __ANEGD1
+	RCALL SUBOPT_0x3
+; 0000 004B 
+; 0000 004C switch (cmd)
+_0x12:
+	LDD  R30,Y+6
+	LDI  R31,0
+; 0000 004D {
+; 0000 004E case 'P': case 'p': pid.Kp = val / 10.0f; break;
+	CPI  R30,LOW(0x50)
+	LDI  R26,HIGH(0x50)
+	CPC  R31,R26
+	BREQ _0x17
+	CPI  R30,LOW(0x70)
+	LDI  R26,HIGH(0x70)
+	CPC  R31,R26
+	BRNE _0x18
+_0x17:
+	RCALL SUBOPT_0x4
+	STS  _pid,R30
+	STS  _pid+1,R31
+	STS  _pid+2,R22
+	STS  _pid+3,R23
+	RJMP _0x15
+; 0000 004F case 'I': case 'i': pid.Ki = val / 10.0f; break;
+_0x18:
+	CPI  R30,LOW(0x49)
+	LDI  R26,HIGH(0x49)
+	CPC  R31,R26
+	BREQ _0x1A
+	CPI  R30,LOW(0x69)
+	LDI  R26,HIGH(0x69)
+	CPC  R31,R26
+	BRNE _0x1B
+_0x1A:
+	RCALL SUBOPT_0x4
+	__PUTD1MN _pid,4
+	RJMP _0x15
+; 0000 0050 case 'D': case 'd': pid.Kd = val / 10.0f; break;
+_0x1B:
+	CPI  R30,LOW(0x44)
+	LDI  R26,HIGH(0x44)
+	CPC  R31,R26
+	BREQ _0x1D
+	CPI  R30,LOW(0x64)
+	LDI  R26,HIGH(0x64)
+	CPC  R31,R26
+	BRNE _0x1E
+_0x1D:
+	RCALL SUBOPT_0x4
+	__PUTD1MN _pid,8
+	RJMP _0x15
+; 0000 0051 case 'S': case 's': pid.setpoint = val / 10.0f; break;
+_0x1E:
+	CPI  R30,LOW(0x53)
+	LDI  R26,HIGH(0x53)
+	CPC  R31,R26
+	BREQ _0x20
+	CPI  R30,LOW(0x73)
+	LDI  R26,HIGH(0x73)
+	CPC  R31,R26
+	BRNE _0x21
+_0x20:
+	RCALL SUBOPT_0x4
+	__PUTD1MN _pid,12
+	RJMP _0x15
+; 0000 0052 case '?':
+_0x21:
+	CPI  R30,LOW(0x3F)
+	LDI  R26,HIGH(0x3F)
+	CPC  R31,R26
+	BRNE _0x24
+; 0000 0053 uart_puts("Kp*10="); uart_put_int((long)(pid.Kp * 10));
+	__POINTW2MN _0x23,0
+	RCALL _uart_puts
+	LDS  R26,_pid
+	LDS  R27,_pid+1
+	LDS  R24,_pid+2
+	LDS  R25,_pid+3
+	RCALL SUBOPT_0x5
+; 0000 0054 uart_puts(" Ki*10="); uart_put_int((long)(pid.Ki * 10));
+	__POINTW2MN _0x23,7
+	RCALL _uart_puts
+	__GETD2MN _pid,4
+	RCALL SUBOPT_0x5
+; 0000 0055 uart_puts(" Kd*10="); uart_put_int((long)(pid.Kd * 10));
+	__POINTW2MN _0x23,15
+	RCALL _uart_puts
+	__GETD2MN _pid,8
+	RCALL SUBOPT_0x5
+; 0000 0056 uart_puts(" Sp*10="); uart_put_int((long)(pid.setpoint * 10));
+	__POINTW2MN _0x23,23
+	RCALL _uart_puts
+	__GETD2MN _pid,12
+	RCALL SUBOPT_0x5
+; 0000 0057 uart_puts("\r\n");
+	__POINTW2MN _0x23,31
+	RCALL _uart_puts
+; 0000 0058 break;
+; 0000 0059 default: break;
+_0x24:
+; 0000 005A }
+_0x15:
+; 0000 005B }
+	ADIW R28,7
+; 0000 005C idx = 0;
+_0x8:
+	LDI  R30,LOW(0)
+	STS  _idx_S0000001000,R30
+; 0000 005D }
+; 0000 005E else if (idx < sizeof(line) - 1)
+	RJMP _0x25
+_0x7:
+	LDS  R26,_idx_S0000001000
+	CPI  R26,LOW(0xF)
+	BRSH _0x26
+; 0000 005F {
+; 0000 0060 line[idx++] = c;
+	LDS  R30,_idx_S0000001000
+	SUBI R30,-LOW(1)
+	STS  _idx_S0000001000,R30
+	SUBI R30,LOW(1)
+	LDI  R31,0
+	SUBI R30,LOW(-_line_S0000001000)
+	SBCI R31,HIGH(-_line_S0000001000)
+	ST   Z,R17
+; 0000 0061 }
+; 0000 0062 }
+_0x26:
+_0x25:
+	RJMP _0x3
+_0x5:
+; 0000 0063 }
+	JMP  _0x2080005
 ; .FEND
 
 	.DSEG
-;void MPU6050_Init(void)
-; 0002 0079 {
+_0x23:
+	.BYTE 0x22
+;void main(void)
+; 0000 0066 {
 
 	.CSEG
-_MPU6050_Init:
-; .FSTART _MPU6050_Init
-; 0002 007A i2c_init();
-	RCALL _i2c_init_G002
-; 0002 007B i2c_start();
-	RCALL _i2c_start_G002
-; 0002 007C i2c_stop();
+_main:
+; .FSTART _main
+; 0000 0067 float         angle;
+; 0000 0068 int           out;
+; 0000 0069 unsigned char fallen = 0;
+; 0000 006A unsigned char tel    = 0;
+; 0000 006B 
+; 0000 006C DDRB |= (1 << 5);          /* LED */
+	SBIW R28,4
+;	angle -> Y+0
+;	out -> R16,R17
+;	fallen -> R19
+;	tel -> R18
+	LDI  R19,0
+	LDI  R18,0
+	SBI  0x4,5
+; 0000 006D uart_init();
+	RCALL _uart_init
+; 0000 006E Motor_Init();
+	RCALL _Motor_Init
+; 0000 006F Motor_Stop();
+	RCALL _Motor_Stop
+; 0000 0070 
+; 0000 0071 uart_puts("\r\nBOOT...\r\n");
+	__POINTW2MN _0x27,0
+	RCALL _uart_puts
+; 0000 0072 
+; 0000 0073 if (MPU6050_Init())
+	RCALL _MPU6050_Init
+	CPI  R30,0
+	BREQ _0x28
+; 0000 0074 {
+; 0000 0075 uart_puts("MPU OK, WHO_AM_I=0x");
+	__POINTW2MN _0x27,12
+	RCALL _uart_puts
+; 0000 0076 uart_put_int((long)MPU6050_WhoAmI());   /* in dang decimal cho gon  */
+	RCALL _MPU6050_WhoAmI
+	CLR  R31
+	CLR  R22
+	CLR  R23
+	MOVW R26,R30
+	MOVW R24,R22
+	RCALL _uart_put_int
+; 0000 0077 uart_puts(" (0x68=MPU6050, 112=0x70=MPU6500 clone - deu OK)\r\n");
+	__POINTW2MN _0x27,32
+	RCALL _uart_puts
+; 0000 0078 }
+; 0000 0079 else
+	RJMP _0x29
+_0x28:
+; 0000 007A {
+; 0000 007B uart_puts("MPU NOT FOUND - check wiring!\r\n");
+	__POINTW2MN _0x27,83
+	RCALL _uart_puts
+; 0000 007C while (1) { LED_TGL(); delay_ms(120); }    /* nhay nhanh = loi sensor */
+_0x2A:
+	RCALL SUBOPT_0x6
+	LDI  R26,LOW(120)
+	LDI  R27,0
+	RCALL _delay_ms
+	RJMP _0x2A
+; 0000 007D }
+_0x29:
+; 0000 007E 
+; 0000 007F uart_puts("Calibrating gyro - GIU XE YEN ~2s...\r\n");
+	__POINTW2MN _0x27,115
+	RCALL _uart_puts
+; 0000 0080 LED_ON();
+	SBI  0x5,5
+; 0000 0081 MPU6050_CalibrateGyro();
+	RCALL _MPU6050_CalibrateGyro
+; 0000 0082 LED_OFF();
+	CBI  0x5,5
+; 0000 0083 uart_puts("Calib done\r\n");
+	__POINTW2MN _0x27,154
+	RCALL _uart_puts
+; 0000 0084 
+; 0000 0085 Filter_Init(&filt, COMP_ALPHA);
+	RCALL SUBOPT_0x7
+	__GETD2N 0x3F7AE148
+	RCALL _Filter_Init
+; 0000 0086 PID_Init(&pid, PID_KP_INIT, PID_KI_INIT, PID_KD_INIT,
+; 0000 0087 PID_I_LIMIT, PID_OUT_LIMIT, PID_SETPOINT_INIT);
 	RCALL SUBOPT_0x8
-; 0002 007D 
-; 0002 007E // Wake up sensor
-; 0002 007F i2c_start();
-; 0002 0080 i2c_write(MPU6050_I2C_ADDR << 1);
-; 0002 0081 i2c_write(MPU6050_RA_PWR_MGMT_1);
-	LDI  R26,LOW(107)
-	RCALL SUBOPT_0x9
-; 0002 0082 i2c_write(0x00);
-; 0002 0083 i2c_stop();
-; 0002 0084 
-; 0002 0085 // DLPF off
-; 0002 0086 i2c_start();
-; 0002 0087 i2c_write(MPU6050_I2C_ADDR << 1);
-; 0002 0088 i2c_write(MPU6050_RA_CONFIG);
-	LDI  R26,LOW(26)
-	RCALL SUBOPT_0x9
-; 0002 0089 i2c_write(0x00);
-; 0002 008A i2c_stop();
-; 0002 008B 
-; 0002 008C // Gyro config: +/-250 deg/s
-; 0002 008D i2c_start();
-; 0002 008E i2c_write(MPU6050_I2C_ADDR << 1);
-; 0002 008F i2c_write(MPU6050_RA_GYRO_CONFIG);
-	LDI  R26,LOW(27)
-	RCALL SUBOPT_0x9
-; 0002 0090 i2c_write(0x00);
-; 0002 0091 i2c_stop();
-; 0002 0092 
-; 0002 0093 // Accel config: +/-2g
-; 0002 0094 i2c_start();
-; 0002 0095 i2c_write(MPU6050_I2C_ADDR << 1);
-; 0002 0096 i2c_write(MPU6050_RA_ACCEL_CONFIG);
-	LDI  R26,LOW(28)
-	RCALL _i2c_write_G002
-; 0002 0097 i2c_write(0x00);
-	LDI  R26,LOW(0)
-	RCALL _i2c_write_G002
-; 0002 0098 i2c_stop();
-	RCALL _i2c_stop_G002
-; 0002 0099 }
-	RET
-; .FEND
-;void MPU6050_Read_Raw(MPU6050_Data* data, float dt)
-; 0002 009C {
-_MPU6050_Read_Raw:
-; .FSTART _MPU6050_Read_Raw
-; 0002 009D unsigned char buf[14];
-; 0002 009E int16_t ax, ay, az, gx, gy, gz;
-; 0002 009F 
-; 0002 00A0 i2c_start();
-	RCALL __PUTPARD2
-	SBIW R28,20
-	RCALL __SAVELOCR6
-;	*data -> Y+30
-;	dt -> Y+26
-;	buf -> Y+12
-;	ax -> R16,R17
-;	ay -> R18,R19
-;	az -> R20,R21
-;	gx -> Y+10
-;	gy -> Y+8
-;	gz -> Y+6
-	RCALL _i2c_start_G002
-; 0002 00A1 i2c_write(MPU6050_I2C_ADDR << 1);
-	LDI  R26,LOW(208)
-	RCALL _i2c_write_G002
-; 0002 00A2 i2c_write(MPU6050_RA_ACCEL_XOUT_H);
-	LDI  R26,LOW(59)
-	RCALL _i2c_write_G002
-; 0002 00A3 i2c_start();
-	RCALL _i2c_start_G002
-; 0002 00A4 i2c_write((MPU6050_I2C_ADDR << 1) | 1);
-	LDI  R26,LOW(209)
-	RCALL _i2c_write_G002
-; 0002 00A5 
-; 0002 00A6 buf[0] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+12,R30
-; 0002 00A7 buf[1] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+13,R30
-; 0002 00A8 buf[2] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+14,R30
-; 0002 00A9 buf[3] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+15,R30
-; 0002 00AA buf[4] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+16,R30
-; 0002 00AB buf[5] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+17,R30
-; 0002 00AC buf[6] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+18,R30
-; 0002 00AD buf[7] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+19,R30
-; 0002 00AE buf[8] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+20,R30
-; 0002 00AF buf[9] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+21,R30
-; 0002 00B0 buf[10] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+22,R30
-; 0002 00B1 buf[11] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+23,R30
-; 0002 00B2 buf[12] = i2c_read(1);
-	LDI  R26,LOW(1)
-	RCALL _i2c_read_G002
-	STD  Y+24,R30
-; 0002 00B3 buf[13] = i2c_read(0);
-	LDI  R26,LOW(0)
-	RCALL _i2c_read_G002
-	STD  Y+25,R30
-; 0002 00B4 
-; 0002 00B5 i2c_stop();
-	RCALL _i2c_stop_G002
-; 0002 00B6 
-; 0002 00B7 ax = (int16_t)((buf[0] << 8) | buf[1]);
-	LDI  R30,0
-	LDD  R31,Y+12
-	MOVW R26,R30
-	LDD  R30,Y+13
-	LDI  R31,0
-	OR   R30,R26
-	OR   R31,R27
-	MOVW R16,R30
-; 0002 00B8 ay = (int16_t)((buf[2] << 8) | buf[3]);
-	LDI  R30,0
-	LDD  R31,Y+14
-	MOVW R26,R30
-	LDD  R30,Y+15
-	LDI  R31,0
-	OR   R30,R26
-	OR   R31,R27
-	MOVW R18,R30
-; 0002 00B9 az = (int16_t)((buf[4] << 8) | buf[5]);
-	LDI  R30,0
-	LDD  R31,Y+16
-	MOVW R26,R30
-	LDD  R30,Y+17
-	LDI  R31,0
-	OR   R30,R26
-	OR   R31,R27
-	MOVW R20,R30
-; 0002 00BA gx = (int16_t)((buf[8] << 8) | buf[9]);
-	LDI  R30,0
-	LDD  R31,Y+20
-	MOVW R26,R30
-	LDD  R30,Y+21
-	LDI  R31,0
-	OR   R30,R26
-	OR   R31,R27
-	STD  Y+10,R30
-	STD  Y+10+1,R31
-; 0002 00BB gy = (int16_t)((buf[10] << 8) | buf[11]);
-	LDI  R30,0
-	LDD  R31,Y+22
-	MOVW R26,R30
-	LDD  R30,Y+23
-	LDI  R31,0
-	OR   R30,R26
-	OR   R31,R27
-	STD  Y+8,R30
-	STD  Y+8+1,R31
-; 0002 00BC gz = (int16_t)((buf[12] << 8) | buf[13]);
-	LDI  R30,0
-	LDD  R31,Y+24
-	MOVW R26,R30
-	LDD  R30,Y+25
-	LDI  R31,0
-	OR   R30,R26
-	OR   R31,R27
-	STD  Y+6,R30
-	STD  Y+6+1,R31
-; 0002 00BD 
-; 0002 00BE data->accel_x = ax;
-	LDD  R26,Y+30
-	LDD  R27,Y+30+1
-	ST   X+,R16
-	ST   X,R17
-; 0002 00BF data->accel_y = ay;
-	MOVW R30,R18
-	__PUTW1SNS 30,2
-; 0002 00C0 data->accel_z = az;
-	MOVW R30,R20
-	__PUTW1SNS 30,4
-; 0002 00C1 data->gyro_x = gx;
-	LDD  R30,Y+10
-	LDD  R31,Y+10+1
-	__PUTW1SNS 30,6
-; 0002 00C2 data->gyro_y = gy;
-	LDD  R30,Y+8
-	LDD  R31,Y+8+1
-	__PUTW1SNS 30,8
-; 0002 00C3 data->gyro_z = gz;
-	LDD  R30,Y+6
-	LDD  R31,Y+6+1
-	__PUTW1SNS 30,10
-; 0002 00C4 
-; 0002 00C5 // Convert raw sensor data to physical units.
-; 0002 00C6 // Accel range: +/-2g  => 16384 LSB/g
-; 0002 00C7 // Gyro range: +/-250 deg/s => 131 LSB/(deg/s)
-; 0002 00C8 data->angle_acc = atan2((float)ay, (float)az) * 57.29578f;
-	MOVW R30,R18
-	RCALL SUBOPT_0xA
+	__GETD1N 0x41700000
 	RCALL __PUTPARD1
-	MOVW R30,R20
+	RCALL SUBOPT_0x9
+	RCALL __PUTPARD1
+	__GETD1N 0x3F19999A
+	RCALL __PUTPARD1
+	__GETD1N 0x43160000
+	RCALL __PUTPARD1
+	__GETD1N 0x437F0000
+	RCALL __PUTPARD1
+	__GETD2N 0x0
+	RCALL _PID_Init
+; 0000 0088 
+; 0000 0089 timer2_init_100hz();
+	RCALL _timer2_init_100hz_G000
+; 0000 008A #asm("sei")
+	SEI
+; 0000 008B 
+; 0000 008C uart_puts("BOOT OK\r\n");
+	__POINTW2MN _0x27,167
+	RCALL _uart_puts
+; 0000 008D 
+; 0000 008E #if DEBUG_SENSOR_CHECK
+; 0000 008F /* ---- Che do kiem tra cam bien: stream raw, MOTOR TAT ---- */
+; 0000 0090 while (1)
+; 0000 0091 {
+; 0000 0092 if (g_tick)
+; 0000 0093 {
+; 0000 0094 g_tick = 0;
+; 0000 0095 MPU6050_Read(&imu);
+; 0000 0096 uart_puts("ax=");  uart_put_int(imu.ax);
+; 0000 0097 uart_puts(" ay="); uart_put_int(imu.ay);
+; 0000 0098 uart_puts(" az="); uart_put_int(imu.az);
+; 0000 0099 uart_puts(" gx="); uart_put_int(imu.gx);
+; 0000 009A uart_puts(" gy="); uart_put_int(imu.gy);
+; 0000 009B uart_puts(" gz="); uart_put_int(imu.gz);
+; 0000 009C uart_puts(" ang*10="); uart_put_int((long)(imu.angle_acc * 10));
+; 0000 009D uart_puts("\r\n");
+; 0000 009E LED_TGL();
+; 0000 009F }
+; 0000 00A0 }
+; 0000 00A1 #else
+; 0000 00A2 /* ---- Firmware can bang ---- */
+; 0000 00A3 while (1)
+_0x2D:
+; 0000 00A4 {
+; 0000 00A5 poll_uart_tuning();
+	RCALL _poll_uart_tuning_G000
+; 0000 00A6 
+; 0000 00A7 if (g_tick)
+	LDS  R30,_g_tick
+	CPI  R30,0
+	BRNE PC+2
+	RJMP _0x30
+; 0000 00A8 {
+; 0000 00A9 g_tick = 0;
+	LDI  R30,LOW(0)
+	STS  _g_tick,R30
+; 0000 00AA out = 0;
+	__GETWRN 16,17,0
+; 0000 00AB 
+; 0000 00AC MPU6050_Read(&imu);
+	LDI  R26,LOW(_imu)
+	LDI  R27,HIGH(_imu)
+	RCALL _MPU6050_Read
+; 0000 00AD angle = Filter_Update(&filt, imu.angle_acc, imu.gyro_rate, SAMPLE_DT);
+	RCALL SUBOPT_0x7
+	__GETD1MN _imu,12
+	RCALL __PUTPARD1
+	__GETD1MN _imu,16
 	RCALL SUBOPT_0xA
-	MOVW R26,R30
-	MOVW R24,R22
-	RCALL _atan2
-	__GETD2N 0x42652EE1
-	RCALL __MULF12
-	__PUTD1SNS 30,12
-; 0002 00C9 data->angle_gyro = (float)gy / 131.0f;
-	LDD  R30,Y+8
-	LDD  R31,Y+8+1
-	RCALL SUBOPT_0xA
-	MOVW R26,R30
-	MOVW R24,R22
-	__GETD1N 0x43030000
-	RCALL __DIVF21
-	__PUTD1SNS 30,16
-; 0002 00CA 
-; 0002 00CB if (data->angle_filtered == 0.0f)
-	LDD  R26,Y+30
-	LDD  R27,Y+30+1
-	ADIW R26,20
-	RCALL __GETD1P
-	__CPD10
-	BRNE _0x40012
-; 0002 00CC {
-; 0002 00CD data->angle_filtered = data->angle_acc;
+	RCALL _Filter_Update
 	RCALL SUBOPT_0xB
+; 0000 00AE 
+; 0000 00AF if (angle > FALL_ANGLE || angle < -FALL_ANGLE)
 	RCALL SUBOPT_0xC
-; 0002 00CE }
-; 0002 00CF 
-; 0002 00D0 // Complementary filter: fuse gyro integration with accelerometer angle.
-; 0002 00D1 // dt must be fixed by a timer interrupt (recommended 5 ms to 10 ms).
-; 0002 00D2 data->angle_filtered = g_alpha * (data->angle_filtered + data->angle_gyro * dt) +
-_0x40012:
-; 0002 00D3 (1.0f - g_alpha) * data->angle_acc;
-	LDD  R30,Y+30
-	LDD  R31,Y+30+1
-	__GETD2Z 20
+	__GETD1N 0x42200000
+	RCALL __CMPF12
+	BREQ PC+3
+	BRCS PC+2
+	RJMP _0x32
+	RCALL SUBOPT_0xC
+	__GETD1N 0xC2200000
+	RCALL __CMPF12
+	BRSH _0x31
+_0x32:
+; 0000 00B0 {
+; 0000 00B1 if (!fallen) { Motor_Stop(); PID_Reset(&pid); fallen = 1; }
+	CPI  R19,0
+	BRNE _0x34
+	RCALL _Motor_Stop
+	LDI  R26,LOW(_pid)
+	LDI  R27,HIGH(_pid)
+	RCALL _PID_Reset
+	LDI  R19,LOW(1)
+; 0000 00B2 LED_ON();                              /* sang lien = da nga */
+_0x34:
+	SBI  0x5,5
+; 0000 00B3 }
+; 0000 00B4 else
+	RJMP _0x35
+_0x31:
+; 0000 00B5 {
+; 0000 00B6 fallen = 0;
+	LDI  R19,LOW(0)
+; 0000 00B7 out = (int)(OUTPUT_SIGN * PID_Compute(&pid, angle, SAMPLE_DT));
+	RCALL SUBOPT_0x8
+	RCALL SUBOPT_0x1
+	RCALL SUBOPT_0xA
+	RCALL _PID_Compute
+	RCALL SUBOPT_0xD
+	RCALL __MULF12
+	RCALL __CFD1
+	MOVW R16,R30
+; 0000 00B8 Motor_SetDuty(out, out);
+	ST   -Y,R17
+	ST   -Y,R16
+	MOVW R26,R16
+	RCALL _Motor_SetDuty
+; 0000 00B9 }
+_0x35:
+; 0000 00BA 
+; 0000 00BB /* telemetry ~20Hz de khong nghen UART */
+; 0000 00BC if (++tel >= 5)
+	SUBI R18,-LOW(1)
+	CPI  R18,5
+	BRLO _0x36
+; 0000 00BD {
+; 0000 00BE tel = 0;
+	LDI  R18,LOW(0)
+; 0000 00BF LED_TGL();
+	RCALL SUBOPT_0x6
+; 0000 00C0 uart_puts("a="); uart_put_int((long)(angle * 10));   /* deg*10 */
+	__POINTW2MN _0x27,177
+	RCALL _uart_puts
+	RCALL SUBOPT_0xC
+	RCALL SUBOPT_0x5
+; 0000 00C1 uart_puts(" o="); uart_put_int(out);
+	__POINTW2MN _0x27,180
+	RCALL _uart_puts
+	RCALL SUBOPT_0xE
+	RCALL _uart_put_int
+; 0000 00C2 uart_puts("\r\n");
+	__POINTW2MN _0x27,184
+	RCALL _uart_puts
+; 0000 00C3 }
+; 0000 00C4 }
+_0x36:
+; 0000 00C5 }
+_0x30:
+	RJMP _0x2D
+; 0000 00C6 #endif
+; 0000 00C7 }
+_0x37:
+	RJMP _0x37
+; .FEND
+
+	.DSEG
+_0x27:
+	.BYTE 0xBB
+;interrupt [8] void timer2_compa_isr(void)
+; 0000 00CA {
+
+	.CSEG
+_timer2_compa_isr:
+; .FSTART _timer2_compa_isr
+	ST   -Y,R30
+; 0000 00CB g_tick = 1;
+	LDI  R30,LOW(1)
+	STS  _g_tick,R30
+; 0000 00CC }
+	LD   R30,Y+
+	RETI
+; .FEND
+;void Filter_Init(CompFilter *f, float alpha)
+; 0001 0008 {
+
+	.CSEG
+_Filter_Init:
+; .FSTART _Filter_Init
+; 0001 0009 f->angle = 0.0f;
+	RCALL __PUTPARD2
+	ST   -Y,R17
+	ST   -Y,R16
+	__GETWRS 16,17,6
+;	*f -> R16,R17
+;	alpha -> Y+2
+	MOVW R26,R16
+	RCALL SUBOPT_0xF
+; 0001 000A f->alpha = alpha;
+	RCALL SUBOPT_0x1
+	RCALL SUBOPT_0x10
+; 0001 000B f->init  = 0;
+	MOVW R26,R16
+	ADIW R26,8
+	RCALL SUBOPT_0x11
+; 0001 000C }
+	JMP  _0x2080003
+; .FEND
+;float Filter_Update(CompFilter *f, float acc_angle, float gyro_rate, float dt)
+; 0001 000F {
+_Filter_Update:
+; .FSTART _Filter_Update
+; 0001 0010 if (!f->init)
+	RCALL __PUTPARD2
+	ST   -Y,R17
+	ST   -Y,R16
+	__GETWRS 16,17,14
+;	*f -> R16,R17
+;	acc_angle -> Y+10
+;	gyro_rate -> Y+6
+;	dt -> Y+2
+	MOVW R30,R16
+	LDD  R30,Z+8
+	CPI  R30,0
+	BRNE _0x20003
+; 0001 0011 {
+; 0001 0012 f->angle = acc_angle;
+	RCALL SUBOPT_0x12
+	RCALL SUBOPT_0x13
+; 0001 0013 f->init  = 1;
+	MOVW R26,R16
+	ADIW R26,8
+	LDI  R30,LOW(1)
+	ST   X,R30
+; 0001 0014 return f->angle;
+	RJMP _0x2080008
+; 0001 0015 }
+; 0001 0016 
+; 0001 0017 f->angle = f->alpha * (f->angle + gyro_rate * dt) +
+_0x20003:
+; 0001 0018 (1.0f - f->alpha) * acc_angle;
+	RCALL SUBOPT_0x14
 	PUSH R25
 	PUSH R24
 	PUSH R27
 	PUSH R26
+	RCALL SUBOPT_0x15
+	PUSH R23
+	PUSH R22
+	PUSH R31
+	PUSH R30
+	RCALL SUBOPT_0x1
+	__GETD2S 6
+	RCALL __MULF12
+	POP  R26
+	POP  R27
+	POP  R24
+	POP  R25
+	RCALL __ADDF12
+	POP  R26
+	POP  R27
+	POP  R24
+	POP  R25
+	RCALL __MULF12
+	PUSH R23
+	PUSH R22
+	PUSH R31
+	PUSH R30
+	MOVW R26,R16
+	ADIW R26,4
+	RCALL SUBOPT_0x16
 	RCALL SUBOPT_0xD
-	__GETD1S 26
-	RCALL __MULF12
-	POP  R26
-	POP  R27
-	POP  R24
-	POP  R25
-	RCALL __ADDF12
-	RCALL SUBOPT_0xE
-	RCALL __MULF12
-	PUSH R23
-	PUSH R22
-	PUSH R31
-	PUSH R30
-	RCALL SUBOPT_0xE
-	__GETD1N 0x3F800000
+	RCALL __SWAPD12
 	RCALL __SUBF12
-	PUSH R23
-	PUSH R22
-	PUSH R31
-	PUSH R30
-	RCALL SUBOPT_0xB
-	POP  R26
-	POP  R27
-	POP  R24
-	POP  R25
-	RCALL __MULF12
+	RCALL SUBOPT_0x17
 	POP  R26
 	POP  R27
 	POP  R24
 	POP  R25
 	RCALL __ADDF12
-	RCALL SUBOPT_0xC
-; 0002 00D4 }
-	RCALL __LOADLOCR6
-	ADIW R28,32
+	RCALL SUBOPT_0x13
+; 0001 0019 return f->angle;
+_0x2080008:
+	MOVW R26,R16
+	RCALL SUBOPT_0x16
+	LDD  R17,Y+1
+	LDD  R16,Y+0
+	ADIW R28,16
+	RET
+; 0001 001A }
+; .FEND
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.SET power_ctrl_reg=smcr
+	#endif
+;static unsigned int clamp_duty(int d)
+; 0002 0012 {
+
+	.CSEG
+_clamp_duty_G002:
+; .FSTART _clamp_duty_G002
+; 0002 0013 if (d < 0) d = -d;
+	ST   -Y,R17
+	ST   -Y,R16
+	MOVW R16,R26
+;	d -> R16,R17
+	TST  R17
+	BRPL _0x40003
+	MOVW R30,R16
+	RCALL __ANEGW1
+	MOVW R16,R30
+; 0002 0014 if (d > MOTOR_MAX_DUTY) d = MOTOR_MAX_DUTY;
+_0x40003:
+	__CPWRN 16,17,256
+	BRLT _0x40004
+	__GETWRN 16,17,255
+; 0002 0015 if (d != 0 && d < MOTOR_DEADBAND) d = MOTOR_DEADBAND;
+_0x40004:
+	CLR  R0
+	CP   R0,R16
+	CPC  R0,R17
+	BREQ _0x40006
+	__CPWRN 16,17,30
+	BRLT _0x40007
+_0x40006:
+	RJMP _0x40005
+_0x40007:
+	__GETWRN 16,17,30
+; 0002 0016 return (unsigned int)d;
+_0x40005:
+	MOVW R30,R16
+	JMP  _0x2080006
+; 0002 0017 }
+; .FEND
+;void Motor_Init(void)
+; 0002 001A {
+_Motor_Init:
+; .FSTART _Motor_Init
+; 0002 001B /* IN1=PD2, IN2=PD4, IN3=PD7 = output */
+; 0002 001C DDRD |= (1 << 2) | (1 << 4) | (1 << 7);
+	IN   R30,0xA
+	ORI  R30,LOW(0x94)
+	OUT  0xA,R30
+; 0002 001D /* IN4=PB0, ENA=PB1(OC1A), ENB=PB2(OC1B) = output */
+; 0002 001E DDRB |= (1 << 0) | (1 << 1) | (1 << 2);
+	IN   R30,0x4
+	ORI  R30,LOW(0x7)
+	OUT  0x4,R30
+; 0002 001F 
+; 0002 0020 /* Fast PWM mode 14: WGM13:12:11:10 = 1110, TOP=ICR1, non-inverting */
+; 0002 0021 TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11);
+	LDI  R30,LOW(162)
+	STS  128,R30
+; 0002 0022 TCCR1B = (1 << WGM13)  | (1 << WGM12)  | (1 << CS10);   /* prescaler 1 */
+	LDI  R30,LOW(25)
+	STS  129,R30
+; 0002 0023 
+; 0002 0024 /* TOP = ICR1 = PWM_TOP (ghi HIGH truoc, LOW sau) */
+; 0002 0025 ICR1H = (unsigned char)(PWM_TOP >> 8);
+	LDI  R30,LOW(0)
+	STS  135,R30
+; 0002 0026 ICR1L = (unsigned char)(PWM_TOP & 0xFF);
+	LDI  R30,LOW(255)
+	STS  134,R30
+; 0002 0027 
+; 0002 0028 OCR1AH = 0; OCR1AL = 0;
+	RCALL SUBOPT_0x18
+; 0002 0029 OCR1BH = 0; OCR1BL = 0;
+; 0002 002A }
 	RET
 ; .FEND
-; 0003 0004 float integral_limit, float output_limit, float setpoint)
-;float integral_limit, float output_limit, float setpoint)
-; 0003 0005 {
+;static void set_left(int speed)
+; 0002 002E {
+_set_left_G002:
+; .FSTART _set_left_G002
+; 0002 002F unsigned int duty = clamp_duty(speed);
+; 0002 0030 if (speed >= 0) { PORTD.2 = 1; PORTD.4 = 0; }
+	RCALL SUBOPT_0x19
+;	speed -> Y+2
+;	duty -> R16,R17
+	BRMI _0x40008
+	SBI  0xB,2
+	CBI  0xB,4
+; 0002 0031 else            { PORTD.2 = 0; PORTD.4 = 1; }
+	RJMP _0x4000D
+_0x40008:
+	CBI  0xB,2
+	SBI  0xB,4
+_0x4000D:
+; 0002 0032 OCR1AH = (unsigned char)(duty >> 8);
+	STS  137,R17
+; 0002 0033 OCR1AL = (unsigned char)(duty & 0xFF);
+	MOV  R30,R16
+	STS  136,R30
+; 0002 0034 }
+	LDD  R17,Y+1
+	LDD  R16,Y+0
+	JMP  _0x2080002
+; .FEND
+;static void set_right(int speed)
+; 0002 0038 {
+_set_right_G002:
+; .FSTART _set_right_G002
+; 0002 0039 unsigned int duty = clamp_duty(speed);
+; 0002 003A if (speed >= 0) { PORTD.7 = 1; PORTB.0 = 0; }
+	RCALL SUBOPT_0x19
+;	speed -> Y+2
+;	duty -> R16,R17
+	BRMI _0x40012
+	SBI  0xB,7
+	CBI  0x5,0
+; 0002 003B else            { PORTD.7 = 0; PORTB.0 = 1; }
+	RJMP _0x40017
+_0x40012:
+	CBI  0xB,7
+	SBI  0x5,0
+_0x40017:
+; 0002 003C OCR1BH = (unsigned char)(duty >> 8);
+	STS  139,R17
+; 0002 003D OCR1BL = (unsigned char)(duty & 0xFF);
+	MOV  R30,R16
+	STS  138,R30
+; 0002 003E }
+	LDD  R17,Y+1
+	LDD  R16,Y+0
+	JMP  _0x2080002
+; .FEND
+;void Motor_SetDuty(int left, int right)
+; 0002 0041 {
+_Motor_SetDuty:
+; .FSTART _Motor_SetDuty
+; 0002 0042 /* can chinh toc do 2 dong co (xem MOTOR_L_SCALE / MOTOR_R_SCALE) */
+; 0002 0043 set_left ((int)((long)left  * MOTOR_L_SCALE / 100));
+	RCALL __SAVELOCR4
+	MOVW R16,R26
+	__GETWRS 18,19,4
+;	left -> R18,R19
+;	right -> R16,R17
+	MOVW R26,R18
+	__CWD2
+	RCALL SUBOPT_0x1A
+	RCALL SUBOPT_0x1B
+	RCALL _set_left_G002
+; 0002 0044 set_right((int)((long)right * MOTOR_R_SCALE / 100));
+	RCALL SUBOPT_0xE
+	RCALL SUBOPT_0x1A
+	RCALL SUBOPT_0x1B
+	RCALL _set_right_G002
+; 0002 0045 }
+	RCALL __LOADLOCR4
+	ADIW R28,6
+	RET
+; .FEND
+;void Motor_Stop(void)
+; 0002 0048 {
+_Motor_Stop:
+; .FSTART _Motor_Stop
+; 0002 0049 OCR1AH = 0; OCR1AL = 0;
+	RCALL SUBOPT_0x18
+; 0002 004A OCR1BH = 0; OCR1BL = 0;
+; 0002 004B PORTD.2 = 0; PORTD.4 = 0; PORTD.7 = 0; PORTB.0 = 0;
+	CBI  0xB,2
+	CBI  0xB,4
+	CBI  0xB,7
+	CBI  0x5,0
+; 0002 004C }
+	RET
+; .FEND
+; 0003 000B float i_limit, float out_limit, float setpoint)
+;float i_limit, float out_limit, float setpoint)
+; 0003 000C {
 
 	.CSEG
 _PID_Init:
 ; .FSTART _PID_Init
-; 0003 0006 pid->Kp = Kp;
+; 0003 000D p->Kp = Kp; p->Ki = Ki; p->Kd = Kd;
 	RCALL __PUTPARD2
 	ST   -Y,R17
 	ST   -Y,R16
 	__GETWRS 16,17,26
-;	*pid -> R16,R17
+;	*p -> R16,R17
 ;	Kp -> Y+22
 ;	Ki -> Y+18
 ;	Kd -> Y+14
-;	integral_limit -> Y+10
-;	output_limit -> Y+6
+;	i_limit -> Y+10
+;	out_limit -> Y+6
 ;	setpoint -> Y+2
-	__GETD1S 22
-	MOVW R26,R16
-	RCALL SUBOPT_0xF
-; 0003 0007 pid->Ki = Ki;
-	__GETD1S 18
-	__PUTD1RNS 16,4
-; 0003 0008 pid->Kd = Kd;
-	__GETD1S 14
+	RCALL SUBOPT_0x1C
+	RCALL SUBOPT_0x13
+	RCALL SUBOPT_0x1D
+	RCALL SUBOPT_0x10
+	RCALL SUBOPT_0x1E
 	__PUTD1RNS 16,8
-; 0003 0009 pid->Integral = 0.0f;
+; 0003 000E p->setpoint   = setpoint;
+	RCALL SUBOPT_0x1
+	__PUTD1RNS 16,12
+; 0003 000F p->integral   = 0.0f;
 	MOVW R26,R16
 	ADIW R26,16
-	RCALL SUBOPT_0x2
 	RCALL SUBOPT_0xF
-; 0003 000A pid->Derivative = 0.0f;
+; 0003 0010 p->prev_meas  = 0.0f;
 	MOVW R26,R16
 	ADIW R26,20
-	RCALL SUBOPT_0x2
 	RCALL SUBOPT_0xF
-; 0003 000B pid->Error = 0.0f;
-	MOVW R26,R16
-	ADIW R26,12
-	RCALL SUBOPT_0x2
-	RCALL SUBOPT_0xF
-; 0003 000C pid->Last_Error = 0.0f;
+; 0003 0011 p->deriv_filt = 0.0f;
 	MOVW R26,R16
 	ADIW R26,24
-	RCALL SUBOPT_0x2
 	RCALL SUBOPT_0xF
-; 0003 000D pid->Setpoint = setpoint;
-	RCALL SUBOPT_0x5
+; 0003 0012 p->i_limit    = i_limit;
+	RCALL SUBOPT_0x12
 	__PUTD1RNS 16,28
-; 0003 000E pid->Integral_Limit = integral_limit;
-	__GETD1S 10
-	__PUTD1RNS 16,36
-; 0003 000F pid->Output_Limit = output_limit;
-	RCALL SUBOPT_0x10
-	__PUTD1RNS 16,40
-; 0003 0010 pid->Output = 0.0f;
+; 0003 0013 p->out_limit  = out_limit;
+	RCALL SUBOPT_0x1F
+	__PUTD1RNS 16,32
+; 0003 0014 p->init       = 0;
 	MOVW R26,R16
-	ADIW R26,32
-	RCALL SUBOPT_0x2
-	RCALL SUBOPT_0xF
-; 0003 0011 }
-	LDD  R17,Y+1
-	LDD  R16,Y+0
+	ADIW R26,36
+	RCALL SUBOPT_0x11
+; 0003 0015 }
 	ADIW R28,28
 	RET
 ; .FEND
-;float PID_Compute(PID_Controller* pid, float current_angle, float dt)
-; 0003 0014 {
-_PID_Compute:
-; .FSTART _PID_Compute
-; 0003 0015 pid->Error = pid->Setpoint - current_angle;
-	RCALL __PUTPARD2
+;void PID_Reset(PID_Controller *p)
+; 0003 0018 {
+_PID_Reset:
+; .FSTART _PID_Reset
+; 0003 0019 p->integral   = 0.0f;
 	ST   -Y,R17
 	ST   -Y,R16
-	__GETWRS 16,17,10
-;	*pid -> R16,R17
-;	current_angle -> Y+6
-;	dt -> Y+2
-	MOVW R30,R16
-	__GETD2Z 28
-	RCALL SUBOPT_0x10
+	MOVW R16,R26
+;	*p -> R16,R17
+	ADIW R26,16
+	RCALL SUBOPT_0xF
+; 0003 001A p->deriv_filt = 0.0f;
+	MOVW R26,R16
+	ADIW R26,24
+	RCALL SUBOPT_0xF
+; 0003 001B p->init       = 0;
+	MOVW R26,R16
+	ADIW R26,36
+	LDI  R30,LOW(0)
+	ST   X,R30
+; 0003 001C }
+	JMP  _0x2080006
+; .FEND
+;float PID_Compute(PID_Controller *p, float measurement, float dt)
+; 0003 001F {
+_PID_Compute:
+; .FSTART _PID_Compute
+; 0003 0020 float error = p->setpoint - measurement;
+; 0003 0021 float deriv, out;
+; 0003 0022 
+; 0003 0023 /* I + anti-windup */
+; 0003 0024 p->integral += error * dt;
+	RCALL __PUTPARD2
+	SBIW R28,12
+	ST   -Y,R17
+	ST   -Y,R16
+	__GETWRS 16,17,22
+;	*p -> R16,R17
+;	measurement -> Y+18
+;	dt -> Y+14
+;	error -> Y+10
+;	deriv -> Y+6
+;	out -> Y+2
+	LDD  R30,Y+22
+	LDD  R31,Y+22+1
+	__GETD2Z 12
+	RCALL SUBOPT_0x1D
 	RCALL __SWAPD12
 	RCALL __SUBF12
-	__PUTD1RNS 16,12
-; 0003 0016 pid->Integral += pid->Error * dt;
+	__PUTD1S 10
 	MOVW R30,R16
 	ADIW R30,16
 	PUSH R31
 	PUSH R30
 	MOVW R26,R30
-	RCALL SUBOPT_0x11
+	RCALL SUBOPT_0x16
 	PUSH R23
 	PUSH R22
 	PUSH R31
 	PUSH R30
-	RCALL SUBOPT_0x12
-	RCALL SUBOPT_0x5
-	RCALL __MULF12
+	RCALL SUBOPT_0x1E
+	RCALL SUBOPT_0x17
 	POP  R26
 	POP  R27
 	POP  R24
@@ -2553,76 +2605,91 @@ _PID_Compute:
 	RCALL __ADDF12
 	POP  R26
 	POP  R27
-	RCALL SUBOPT_0xF
-; 0003 0017 
-; 0003 0018 if (pid->Integral > pid->Integral_Limit) pid->Integral = pid->Integral_Limit;
-	RCALL SUBOPT_0x13
+	__PUTDP1
+; 0003 0025 if (p->integral >  p->i_limit) p->integral =  p->i_limit;
+	RCALL SUBOPT_0x20
 	MOVW R26,R0
 	RCALL __CMPF12
 	BREQ PC+2
 	BRCC PC+2
 	RJMP _0x60003
 	MOVW R26,R16
-	ADIW R26,36
-	RCALL SUBOPT_0x11
-	RCALL SUBOPT_0x14
-; 0003 0019 if (pid->Integral < -pid->Integral_Limit) pid->Integral = -pid->Integral_Limit;
+	ADIW R26,28
+	RCALL SUBOPT_0x16
+	RCALL SUBOPT_0x21
+; 0003 0026 if (p->integral < -p->i_limit) p->integral = -p->i_limit;
 _0x60003:
-	RCALL SUBOPT_0x13
+	RCALL SUBOPT_0x20
 	RCALL __ANEGF1
 	MOVW R26,R0
 	RCALL __CMPF12
 	BRSH _0x60004
 	MOVW R26,R16
-	ADIW R26,36
-	RCALL SUBOPT_0x11
+	ADIW R26,28
+	RCALL SUBOPT_0x16
 	RCALL __ANEGF1
-	RCALL SUBOPT_0x14
-; 0003 001A 
-; 0003 001B pid->Derivative = (pid->Error - pid->Last_Error) / dt;
+	RCALL SUBOPT_0x21
+; 0003 0027 
+; 0003 0028 /* D tren measurement (setpoint coi nhu hang) + low-pass */
+; 0003 0029 if (!p->init) { p->prev_meas = measurement; p->init = 1; }
 _0x60004:
-	RCALL SUBOPT_0x12
-	PUSH R25
-	PUSH R24
-	PUSH R27
-	PUSH R26
 	MOVW R30,R16
-	__GETD2Z 24
-	POP  R30
-	POP  R31
-	POP  R22
-	POP  R23
+	LDD  R30,Z+36
+	CPI  R30,0
+	BRNE _0x60005
+	RCALL SUBOPT_0x22
+	MOVW R26,R16
+	ADIW R26,36
+	LDI  R30,LOW(1)
+	ST   X,R30
+; 0003 002A deriv = -(measurement - p->prev_meas) / dt;
+_0x60005:
+	MOVW R26,R16
+	ADIW R26,20
+	RCALL SUBOPT_0x16
+	__GETD2S 18
+	RCALL __SWAPD12
 	RCALL __SUBF12
+	RCALL __ANEGF1
 	MOVW R26,R30
 	MOVW R24,R22
-	RCALL SUBOPT_0x5
+	RCALL SUBOPT_0x1E
 	RCALL __DIVF21
-	__PUTD1RNS 16,20
-; 0003 001C pid->Output = pid->Kp * pid->Error + pid->Ki * pid->Integral + pid->Kd * pid->Derivative;
+	__PUTD1S 6
+; 0003 002B p->deriv_filt = D_LPF * p->deriv_filt + (1.0f - D_LPF) * deriv;
 	MOVW R26,R16
-	RCALL SUBOPT_0x11
-	PUSH R23
-	PUSH R22
-	PUSH R31
-	PUSH R30
-	MOVW R26,R16
-	ADIW R26,12
-	RCALL SUBOPT_0x11
-	POP  R26
-	POP  R27
-	POP  R24
-	POP  R25
+	ADIW R26,24
+	RCALL SUBOPT_0x16
+	__GETD2N 0x3F333333
 	RCALL __MULF12
 	PUSH R23
 	PUSH R22
 	PUSH R31
 	PUSH R30
-	MOVW R30,R16
-	__GETD2Z 4
+	RCALL SUBOPT_0x1F
+	__GETD2N 0x3E99999A
+	RCALL __MULF12
+	POP  R26
+	POP  R27
+	POP  R24
+	POP  R25
+	RCALL __ADDF12
+	__PUTD1RNS 16,24
+; 0003 002C p->prev_meas  = measurement;
+	RCALL SUBOPT_0x22
+; 0003 002D 
+; 0003 002E out = p->Kp * error + p->Ki * p->integral + p->Kd * p->deriv_filt;
+	RCALL SUBOPT_0x15
+	RCALL SUBOPT_0x17
+	PUSH R23
+	PUSH R22
+	PUSH R31
+	PUSH R30
+	RCALL SUBOPT_0x14
 	MOVW R0,R26
 	MOVW R26,R16
 	ADIW R26,16
-	RCALL SUBOPT_0x11
+	RCALL SUBOPT_0x16
 	MOVW R26,R0
 	RCALL __MULF12
 	POP  R26
@@ -2638,8 +2705,8 @@ _0x60004:
 	__GETD2Z 8
 	MOVW R0,R26
 	MOVW R26,R16
-	ADIW R26,20
-	RCALL SUBOPT_0x11
+	ADIW R26,24
+	RCALL SUBOPT_0x16
 	MOVW R26,R0
 	RCALL __MULF12
 	POP  R26
@@ -2647,112 +2714,790 @@ _0x60004:
 	POP  R24
 	POP  R25
 	RCALL __ADDF12
-	RCALL SUBOPT_0x15
-; 0003 001D 
-; 0003 001E if (pid->Output > pid->Output_Limit) pid->Output = pid->Output_Limit;
-	RCALL SUBOPT_0x16
-	MOVW R26,R0
-	RCALL __CMPF12
-	BREQ PC+2
-	BRCC PC+2
-	RJMP _0x60005
-	MOVW R26,R16
-	ADIW R26,40
-	RCALL SUBOPT_0x11
-	RCALL SUBOPT_0x15
-; 0003 001F if (pid->Output < -pid->Output_Limit) pid->Output = -pid->Output_Limit;
-_0x60005:
-	RCALL SUBOPT_0x16
-	RCALL __ANEGF1
-	MOVW R26,R0
-	RCALL __CMPF12
-	BRSH _0x60006
-	MOVW R26,R16
-	ADIW R26,40
-	RCALL SUBOPT_0x11
-	RCALL __ANEGF1
-	RCALL SUBOPT_0x15
-; 0003 0020 
-; 0003 0021 pid->Last_Error = pid->Error;
-_0x60006:
-	MOVW R26,R16
-	ADIW R26,12
-	RCALL SUBOPT_0x11
-	__PUTD1RNS 16,24
-; 0003 0022 return pid->Output;
+	RCALL SUBOPT_0x3
+; 0003 002F 
+; 0003 0030 if (out >  p->out_limit) out =  p->out_limit;
 	MOVW R26,R16
 	ADIW R26,32
-	RCALL SUBOPT_0x11
+	RCALL SUBOPT_0x16
+	RCALL SUBOPT_0x23
+	BREQ PC+2
+	BRCC PC+2
+	RJMP _0x60006
+	MOVW R26,R16
+	ADIW R26,32
+	RCALL SUBOPT_0x16
+	RCALL SUBOPT_0x3
+; 0003 0031 if (out < -p->out_limit) out = -p->out_limit;
+_0x60006:
+	RCALL SUBOPT_0x24
+	RCALL SUBOPT_0x23
+	BRSH _0x60007
+	RCALL SUBOPT_0x24
+	RCALL SUBOPT_0x3
+; 0003 0032 return out;
+_0x60007:
+	RCALL SUBOPT_0x1
 	LDD  R17,Y+1
 	LDD  R16,Y+0
-	RJMP _0x2080001
-; 0003 0023 }
+	ADIW R28,24
+	RET
+; 0003 0033 }
+; .FEND
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.SET power_ctrl_reg=smcr
+	#endif
+;void uart_init(void)
+; 0004 0009 {
+
+	.CSEG
+_uart_init:
+; .FSTART _uart_init
+; 0004 000A UBRR0H = (unsigned char)(UART_UBRR >> 8);
+	LDI  R30,LOW(0)
+	STS  197,R30
+; 0004 000B UBRR0L = (unsigned char)(UART_UBRR);
+	LDI  R30,LOW(25)
+	STS  196,R30
+; 0004 000C UCSR0A = 0x00;                                  /* U2X0 = 0 */
+	LDI  R30,LOW(0)
+	STS  192,R30
+; 0004 000D UCSR0B = (1 << RXEN0) | (1 << TXEN0);           /* bat RX + TX */
+	LDI  R30,LOW(24)
+	STS  193,R30
+; 0004 000E UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);         /* 8 data, 1 stop, no parity */
+	LDI  R30,LOW(6)
+	STS  194,R30
+; 0004 000F }
+	RET
+; .FEND
+;void uart_tx(char c)
+; 0004 0012 {
+_uart_tx:
+; .FSTART _uart_tx
+; 0004 0013 while (!(UCSR0A & (1 << UDRE0)));
+	ST   -Y,R17
+	MOV  R17,R26
+;	c -> R17
+_0x80003:
+	LDS  R30,192
+	ANDI R30,LOW(0x20)
+	BREQ _0x80003
+; 0004 0014 UDR0 = c;
+	STS  198,R17
+; 0004 0015 }
+	JMP  _0x2080005
+; .FEND
+;void uart_puts(char *s)
+; 0004 0018 {
+_uart_puts:
+; .FSTART _uart_puts
+; 0004 0019 while (*s) uart_tx(*s++);
+	ST   -Y,R17
+	ST   -Y,R16
+	MOVW R16,R26
+;	*s -> R16,R17
+_0x80006:
+	MOVW R26,R16
+	LD   R30,X
+	CPI  R30,0
+	BREQ _0x80008
+	__ADDWRN 16,17,1
+	LD   R26,X
+	RCALL _uart_tx
+	RJMP _0x80006
+_0x80008:
+; 0004 001A }
+	JMP  _0x2080006
+; .FEND
+;void uart_put_int(long v)
+; 0004 001D {
+_uart_put_int:
+; .FSTART _uart_put_int
+; 0004 001E char buf[12];
+; 0004 001F unsigned char i = 0;
+; 0004 0020 unsigned long u;
+; 0004 0021 
+; 0004 0022 if (v < 0) { uart_tx('-'); u = (unsigned long)(-v); }
+	RCALL __PUTPARD2
+	SBIW R28,16
+	ST   -Y,R17
+;	v -> Y+17
+;	buf -> Y+5
+;	i -> R17
+;	u -> Y+1
+	LDI  R17,0
+	LDD  R26,Y+20
+	TST  R26
+	BRPL _0x80009
+	LDI  R26,LOW(45)
+	RCALL _uart_tx
+	RCALL SUBOPT_0x25
+	RCALL __ANEGD1
+	RJMP _0x80018
+; 0004 0023 else         u = (unsigned long)v;
+_0x80009:
+	RCALL SUBOPT_0x25
+_0x80018:
+	__PUTD1S 1
+; 0004 0024 
+; 0004 0025 if (u == 0) { uart_tx('0'); return; }
+	RCALL SUBOPT_0x26
+	BRNE _0x8000B
+	LDI  R26,LOW(48)
+	RCALL _uart_tx
+	RJMP _0x2080007
+; 0004 0026 
+; 0004 0027 while (u) { buf[i++] = (char)('0' + (u % 10)); u /= 10; }
+_0x8000B:
+_0x8000C:
+	RCALL SUBOPT_0x26
+	BREQ _0x8000E
+	MOV  R30,R17
+	SUBI R17,-1
+	LDI  R31,0
+	MOVW R26,R28
+	ADIW R26,5
+	ADD  R30,R26
+	ADC  R31,R27
+	PUSH R31
+	PUSH R30
+	RCALL SUBOPT_0x27
+	RCALL __MODD21U
+	SUBI R30,-LOW(48)
+	POP  R26
+	POP  R27
+	ST   X,R30
+	RCALL SUBOPT_0x27
+	RCALL __DIVD21U
+	__PUTD1S 1
+	RJMP _0x8000C
+_0x8000E:
+; 0004 0028 while (i)   uart_tx(buf[--i]);
+_0x8000F:
+	CPI  R17,0
+	BREQ _0x80011
+	SUBI R17,LOW(1)
+	MOV  R30,R17
+	LDI  R31,0
+	MOVW R26,R28
+	ADIW R26,5
+	ADD  R26,R30
+	ADC  R27,R31
+	LD   R26,X
+	RCALL _uart_tx
+	RJMP _0x8000F
+_0x80011:
+; 0004 0029 }
+_0x2080007:
+	LDD  R17,Y+0
+	ADIW R28,21
+	RET
+; .FEND
+;unsigned char uart_available(void)
+; 0004 002C {
+_uart_available:
+; .FSTART _uart_available
+; 0004 002D return (UCSR0A & (1 << RXC0)) ? 1 : 0;
+	LDS  R30,192
+	ANDI R30,LOW(0x80)
+	BREQ _0x80012
+	LDI  R30,LOW(1)
+	RJMP _0x80013
+_0x80012:
+	LDI  R30,LOW(0)
+_0x80013:
+	RET
+; 0004 002E }
+; .FEND
+;char uart_get(void)
+; 0004 0031 {
+_uart_get:
+; .FSTART _uart_get
+; 0004 0032 while (!(UCSR0A & (1 << RXC0)));
+_0x80015:
+	LDS  R30,192
+	ANDI R30,LOW(0x80)
+	BREQ _0x80015
+; 0004 0033 return UDR0;
+	LDS  R30,198
+	RET
+; 0004 0034 }
+; .FEND
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.SET power_ctrl_reg=smcr
+	#endif
+;static void mpu_write_reg(unsigned char reg, unsigned char val)
+; 0005 0011 {
+
+	.CSEG
+_mpu_write_reg_G005:
+; .FSTART _mpu_write_reg_G005
+; 0005 0012 i2c_start(MPU6050_ADDR_W);
+	ST   -Y,R17
+	ST   -Y,R16
+	MOV  R17,R26
+	LDD  R16,Y+2
+;	reg -> R16
+;	val -> R17
+	RCALL SUBOPT_0x28
+; 0005 0013 i2c_write(reg);
+; 0005 0014 i2c_write(val);
+	MOV  R26,R17
+	RCALL _i2c_write
+; 0005 0015 i2c_stop();
+	RCALL _i2c_stop
+; 0005 0016 }
+	LDD  R17,Y+1
+	LDD  R16,Y+0
+	ADIW R28,3
+	RET
+; .FEND
+;static unsigned char mpu_read_reg(unsigned char reg)
+; 0005 0019 {
+_mpu_read_reg_G005:
+; .FSTART _mpu_read_reg_G005
+; 0005 001A unsigned char v;
+; 0005 001B i2c_start(MPU6050_ADDR_W);
+	ST   -Y,R17
+	ST   -Y,R16
+	MOV  R16,R26
+;	reg -> R16
+;	v -> R17
+	RCALL SUBOPT_0x28
+; 0005 001C i2c_write(reg);
+; 0005 001D i2c_start(MPU6050_ADDR_R);          /* repeated start */
+	LDI  R26,LOW(209)
+	RCALL _i2c_start
+; 0005 001E v = i2c_read_nack();
+	RCALL _i2c_read_nack
+	MOV  R17,R30
+; 0005 001F i2c_stop();
+	RCALL _i2c_stop
+; 0005 0020 return v;
+	MOV  R30,R17
+	RJMP _0x2080006
+; 0005 0021 }
+; .FEND
+;unsigned char MPU6050_WhoAmI(void) { return who_id; }
+; 0005 0023 unsigned char MPU6050_WhoAmI(void) { return who_id; }
+_MPU6050_WhoAmI:
+; .FSTART _MPU6050_WhoAmI
+	LDS  R30,_who_id_G005
+	RET
+; .FEND
+;unsigned char MPU6050_Init(void)
+; 0005 0026 {
+_MPU6050_Init:
+; .FSTART _MPU6050_Init
+; 0005 0027 i2c_init();
+	RCALL _i2c_init
+; 0005 0028 delay_ms(100);
+	LDI  R26,LOW(100)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0005 0029 
+; 0005 002A mpu_write_reg(MPU6050_RA_PWR_MGMT_1,  0x00);  /* wake up                 */
+	LDI  R30,LOW(107)
+	RCALL SUBOPT_0x29
+; 0005 002B delay_ms(10);
+; 0005 002C mpu_write_reg(MPU6050_RA_SMPLRT_DIV,  0x09);  /* 1kHz/(1+9) = 100 Hz     */
+	LDI  R30,LOW(25)
+	ST   -Y,R30
+	LDI  R26,LOW(9)
+	RCALL _mpu_write_reg_G005
+; 0005 002D mpu_write_reg(MPU6050_RA_CONFIG,      0x03);  /* DLPF ~44Hz (loc nhieu)  */
+	LDI  R30,LOW(26)
+	ST   -Y,R30
+	LDI  R26,LOW(3)
+	RCALL _mpu_write_reg_G005
+; 0005 002E mpu_write_reg(MPU6050_RA_GYRO_CONFIG, 0x00);  /* +/-250 dps              */
+	LDI  R30,LOW(27)
+	ST   -Y,R30
+	LDI  R26,LOW(0)
+	RCALL _mpu_write_reg_G005
+; 0005 002F mpu_write_reg(MPU6050_RA_ACCEL_CONFIG,0x00);  /* +/-2g                   */
+	LDI  R30,LOW(28)
+	RCALL SUBOPT_0x29
+; 0005 0030 delay_ms(10);
+; 0005 0031 
+; 0005 0032 who_id = mpu_read_reg(MPU6050_RA_WHO_AM_I);
+	LDI  R26,LOW(117)
+	RCALL _mpu_read_reg_G005
+	STS  _who_id_G005,R30
+; 0005 0033 /* Chap nhan MPU6050(0x68) lan clone MPU6500(0x70)/9250(0x71)...
+; 0005 0034 Chi coi la loi khi khong co phan hoi (0x00 hoac 0xFF).               */
+; 0005 0035 return (who_id != 0x00 && who_id != 0xFF) ? 1 : 0;
+	LDS  R26,_who_id_G005
+	CPI  R26,LOW(0x0)
+	BREQ _0xA0003
+	CPI  R26,LOW(0xFF)
+	BRNE _0xA0004
+_0xA0003:
+	RJMP _0xA0005
+_0xA0004:
+	LDI  R30,LOW(1)
+	RJMP _0xA0006
+_0xA0005:
+	LDI  R30,LOW(0)
+_0xA0006:
+	RET
+; 0005 0036 }
+; .FEND
+;void MPU6050_Read(MPU6050_Data *d)
+; 0005 0039 {
+_MPU6050_Read:
+; .FSTART _MPU6050_Read
+; 0005 003A unsigned char b[14];
+; 0005 003B unsigned char i;
+; 0005 003C 
+; 0005 003D i2c_start(MPU6050_ADDR_W);
+	SBIW R28,14
+	RCALL __SAVELOCR4
+	MOVW R18,R26
+;	*d -> R18,R19
+;	b -> Y+4
+;	i -> R17
+	LDI  R26,LOW(208)
+	RCALL _i2c_start
+; 0005 003E i2c_write(MPU6050_RA_ACCEL_XOUT_H);
+	LDI  R26,LOW(59)
+	RCALL _i2c_write
+; 0005 003F i2c_start(MPU6050_ADDR_R);
+	LDI  R26,LOW(209)
+	RCALL _i2c_start
+; 0005 0040 for (i = 0; i < 13; i++) b[i] = i2c_read_ack();
+	LDI  R17,LOW(0)
+_0xA0009:
+	CPI  R17,13
+	BRSH _0xA000A
+	MOV  R30,R17
+	LDI  R31,0
+	MOVW R26,R28
+	ADIW R26,4
+	ADD  R30,R26
+	ADC  R31,R27
+	PUSH R31
+	PUSH R30
+	RCALL _i2c_read_ack
+	POP  R26
+	POP  R27
+	ST   X,R30
+	SUBI R17,-1
+	RJMP _0xA0009
+_0xA000A:
+; 0005 0041 b[13] = i2c_read_nack();
+	RCALL _i2c_read_nack
+	STD  Y+17,R30
+; 0005 0042 i2c_stop();
+	RCALL _i2c_stop
+; 0005 0043 
+; 0005 0044 d->ax = (int16_t)((b[0]  << 8) | b[1]);
+	LDI  R30,0
+	LDD  R31,Y+4
+	MOVW R26,R30
+	LDD  R30,Y+5
+	LDI  R31,0
+	OR   R30,R26
+	OR   R31,R27
+	MOVW R26,R18
+	ST   X+,R30
+	ST   X,R31
+; 0005 0045 d->ay = (int16_t)((b[2]  << 8) | b[3]);
+	LDI  R30,0
+	LDD  R31,Y+6
+	MOVW R26,R30
+	LDD  R30,Y+7
+	LDI  R31,0
+	OR   R30,R26
+	OR   R31,R27
+	__PUTW1RNS 18,2
+; 0005 0046 d->az = (int16_t)((b[4]  << 8) | b[5]);
+	LDI  R30,0
+	LDD  R31,Y+8
+	MOVW R26,R30
+	LDD  R30,Y+9
+	LDI  R31,0
+	OR   R30,R26
+	OR   R31,R27
+	__PUTW1RNS 18,4
+; 0005 0047 /* b[6],b[7] = TEMP (bo qua) */
+; 0005 0048 d->gx = (int16_t)((b[8]  << 8) | b[9]);
+	LDI  R30,0
+	LDD  R31,Y+12
+	MOVW R26,R30
+	LDD  R30,Y+13
+	LDI  R31,0
+	OR   R30,R26
+	OR   R31,R27
+	__PUTW1RNS 18,6
+; 0005 0049 d->gy = (int16_t)((b[10] << 8) | b[11]);
+	LDI  R30,0
+	LDD  R31,Y+14
+	MOVW R26,R30
+	LDD  R30,Y+15
+	LDI  R31,0
+	OR   R30,R26
+	OR   R31,R27
+	__PUTW1RNS 18,8
+; 0005 004A d->gz = (int16_t)((b[12] << 8) | b[13]);
+	LDI  R30,0
+	LDD  R31,Y+16
+	MOVW R26,R30
+	LDD  R30,Y+17
+	LDI  R31,0
+	OR   R30,R26
+	OR   R31,R27
+	__PUTW1RNS 18,10
+; 0005 004B 
+; 0005 004C #if TILT_USES_X_ACCEL
+; 0005 004D d->angle_acc = ACC_ANGLE_SIGN *
+; 0005 004E atan2((float)d->ax, ACC_Z_SIGN * (float)d->az) * RAD2DEG;
+	MOVW R26,R18
+	RCALL SUBOPT_0x2A
+	RCALL __PUTPARD1
+	MOVW R26,R18
+	ADIW R26,4
+	RCALL SUBOPT_0x2A
+	__GETD2N 0xBF800000
+	RCALL __MULF12
+	MOVW R26,R30
+	MOVW R24,R22
+	RCALL _atan2
+	RCALL SUBOPT_0xD
+	RCALL __MULF12
+	__GETD2N 0x42652EE1
+	RCALL __MULF12
+	__PUTD1RNS 18,12
+; 0005 004F d->gyro_rate = GYRO_RATE_SIGN * (((float)d->gy - gyro_bias) / GYRO_SENS);
+	MOVW R26,R18
+	ADIW R26,8
+	RCALL SUBOPT_0x2A
+	LDS  R26,_gyro_bias_G005
+	LDS  R27,_gyro_bias_G005+1
+	LDS  R24,_gyro_bias_G005+2
+	LDS  R25,_gyro_bias_G005+3
+	RCALL __SUBF12
+	MOVW R26,R30
+	MOVW R24,R22
+	__GETD1N 0x43030000
+	RCALL __DIVF21
+	RCALL SUBOPT_0xD
+	RCALL __MULF12
+	__PUTD1RNS 18,16
+; 0005 0050 #else
+; 0005 0051 d->angle_acc = ACC_ANGLE_SIGN *
+; 0005 0052 atan2((float)d->ay, ACC_Z_SIGN * (float)d->az) * RAD2DEG;
+; 0005 0053 d->gyro_rate = GYRO_RATE_SIGN * (((float)d->gx - gyro_bias) / GYRO_SENS);
+; 0005 0054 #endif
+; 0005 0055 }
+	RCALL __LOADLOCR4
+	ADIW R28,18
+	RET
+; .FEND
+;void MPU6050_CalibrateGyro(void)
+; 0005 0058 {
+_MPU6050_CalibrateGyro:
+; .FSTART _MPU6050_CalibrateGyro
+; 0005 0059 unsigned int n;
+; 0005 005A long sum = 0;
+; 0005 005B MPU6050_Data d;
+; 0005 005C 
+; 0005 005D gyro_bias = 0.0f;
+	SBIW R28,24
+	LDI  R30,LOW(0)
+	STD  Y+20,R30
+	STD  Y+21,R30
+	STD  Y+22,R30
+	STD  Y+23,R30
+	ST   -Y,R17
+	ST   -Y,R16
+;	n -> R16,R17
+;	sum -> Y+22
+;	d -> Y+2
+	STS  _gyro_bias_G005,R30
+	STS  _gyro_bias_G005+1,R30
+	STS  _gyro_bias_G005+2,R30
+	STS  _gyro_bias_G005+3,R30
+; 0005 005E for (n = 0; n < 1000; n++)
+	__GETWRN 16,17,0
+_0xA000C:
+	__CPWRN 16,17,1000
+	BRSH _0xA000D
+; 0005 005F {
+; 0005 0060 MPU6050_Read(&d);
+	MOVW R26,R28
+	ADIW R26,2
+	RCALL _MPU6050_Read
+; 0005 0061 #if TILT_USES_X_ACCEL
+; 0005 0062 sum += d.gy;
+	LDD  R30,Y+10
+	LDD  R31,Y+10+1
+	__GETD2S 22
+	RCALL SUBOPT_0x2
+	__PUTD1S 22
+; 0005 0063 #else
+; 0005 0064 sum += d.gx;
+; 0005 0065 #endif
+; 0005 0066 delay_ms(2);
+	LDI  R26,LOW(2)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0005 0067 }
+	__ADDWRN 16,17,1
+	RJMP _0xA000C
+_0xA000D:
+; 0005 0068 gyro_bias = (float)sum / 1000.0f;
+	RCALL SUBOPT_0x1C
+	RCALL __CDF1
+	MOVW R26,R30
+	MOVW R24,R22
+	__GETD1N 0x447A0000
+	RCALL __DIVF21
+	STS  _gyro_bias_G005,R30
+	STS  _gyro_bias_G005+1,R31
+	STS  _gyro_bias_G005+2,R22
+	STS  _gyro_bias_G005+3,R23
+; 0005 0069 }
+	LDD  R17,Y+1
+	LDD  R16,Y+0
+	ADIW R28,26
+	RET
+; .FEND
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.SET power_ctrl_reg=smcr
+	#endif
+;static void twi_wait(void)
+; 0006 0011 {
+
+	.CSEG
+_twi_wait_G006:
+; .FSTART _twi_wait_G006
+; 0006 0012 while (!(TWCR & (1 << TWINT)));
+_0xC0003:
+	LDS  R30,188
+	ANDI R30,LOW(0x80)
+	BREQ _0xC0003
+; 0006 0013 }
+	RET
+; .FEND
+;void i2c_init(void)
+; 0006 0016 {
+_i2c_init:
+; .FSTART _i2c_init
+; 0006 0017 TWSR = 0x00;            /* prescaler = 1 */
+	LDI  R30,LOW(0)
+	STS  185,R30
+; 0006 0018 TWBR = TWI_TWBR_VAL;
+	LDI  R30,LOW(72)
+	STS  184,R30
+; 0006 0019 TWCR = (1 << TWEN);
+	LDI  R30,LOW(4)
+	STS  188,R30
+; 0006 001A }
+	RET
+; .FEND
+;unsigned char i2c_start(unsigned char addr)
+; 0006 001D {
+_i2c_start:
+; .FSTART _i2c_start
+; 0006 001E unsigned char st;
+; 0006 001F 
+; 0006 0020 TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);   /* START */
+	ST   -Y,R17
+	ST   -Y,R16
+	MOV  R16,R26
+;	addr -> R16
+;	st -> R17
+	LDI  R30,LOW(164)
+	STS  188,R30
+; 0006 0021 twi_wait();
+	RCALL _twi_wait_G006
+; 0006 0022 
+; 0006 0023 TWDR = addr;                                        /* SLA + R/W */
+	STS  187,R16
+; 0006 0024 TWCR = (1 << TWINT) | (1 << TWEN);
+	RCALL SUBOPT_0x2B
+; 0006 0025 twi_wait();
+; 0006 0026 
+; 0006 0027 st = TWSR & 0xF8;
+	MOV  R17,R30
+; 0006 0028 return (st == TW_MT_SLA_ACK || st == TW_MR_SLA_ACK) ? 1 : 0;
+	CPI  R17,24
+	BREQ _0xC0006
+	CPI  R17,64
+	BRNE _0xC0008
+_0xC0006:
+	LDI  R30,LOW(1)
+	RJMP _0xC0009
+_0xC0008:
+	LDI  R30,LOW(0)
+_0xC0009:
+_0x2080006:
+	LD   R16,Y+
+	LD   R17,Y+
+	RET
+; 0006 0029 }
+; .FEND
+;void i2c_stop(void)
+; 0006 002C {
+_i2c_stop:
+; .FSTART _i2c_stop
+; 0006 002D TWCR = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
+	LDI  R30,LOW(148)
+	STS  188,R30
+; 0006 002E while (TWCR & (1 << TWSTO));
+_0xC000B:
+	LDS  R30,188
+	ANDI R30,LOW(0x10)
+	BRNE _0xC000B
+; 0006 002F }
+	RET
+; .FEND
+;unsigned char i2c_write(unsigned char data)
+; 0006 0032 {
+_i2c_write:
+; .FSTART _i2c_write
+; 0006 0033 TWDR = data;
+	ST   -Y,R17
+	MOV  R17,R26
+;	data -> R17
+	STS  187,R17
+; 0006 0034 TWCR = (1 << TWINT) | (1 << TWEN);
+	RCALL SUBOPT_0x2B
+; 0006 0035 twi_wait();
+; 0006 0036 return ((TWSR & 0xF8) == TW_MT_DATA_ACK) ? 1 : 0;
+	CPI  R30,LOW(0x28)
+	BRNE _0xC000E
+	LDI  R30,LOW(1)
+	RJMP _0xC000F
+_0xC000E:
+	LDI  R30,LOW(0)
+_0xC000F:
+_0x2080005:
+	LD   R17,Y+
+	RET
+; 0006 0037 }
+; .FEND
+;unsigned char i2c_read_ack(void)
+; 0006 003A {
+_i2c_read_ack:
+; .FSTART _i2c_read_ack
+; 0006 003B TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+	LDI  R30,LOW(196)
+	RJMP _0x2080004
+; 0006 003C twi_wait();
+; 0006 003D return TWDR;
+; 0006 003E }
+; .FEND
+;unsigned char i2c_read_nack(void)
+; 0006 0041 {
+_i2c_read_nack:
+; .FSTART _i2c_read_nack
+; 0006 0042 TWCR = (1 << TWINT) | (1 << TWEN);
+	LDI  R30,LOW(132)
+_0x2080004:
+	STS  188,R30
+; 0006 0043 twi_wait();
+	RCALL _twi_wait_G006
+; 0006 0044 return TWDR;
+	LDS  R30,187
+	RET
+; 0006 0045 }
 ; .FEND
 
 	.CSEG
 _xatan:
 ; .FSTART _xatan
-	RCALL SUBOPT_0x17
-	RCALL SUBOPT_0x18
-	RCALL SUBOPT_0x4
-	RCALL SUBOPT_0x19
+	RCALL SUBOPT_0x2C
+	RCALL SUBOPT_0x2D
+	RCALL SUBOPT_0xB
+	RCALL SUBOPT_0x2E
 	__GETD2N 0x40CBD065
-	RCALL SUBOPT_0x1A
-	RCALL SUBOPT_0x18
+	RCALL SUBOPT_0x2F
+	RCALL SUBOPT_0x2D
 	PUSH R23
 	PUSH R22
 	PUSH R31
 	PUSH R30
-	RCALL SUBOPT_0x19
+	RCALL SUBOPT_0x2E
 	__GETD2N 0x41296D00
 	RCALL __ADDF12
-	RCALL SUBOPT_0x1B
-	RCALL SUBOPT_0x1A
+	RCALL SUBOPT_0xC
+	RCALL SUBOPT_0x2F
 	POP  R26
 	POP  R27
 	POP  R24
 	POP  R25
 	RCALL __DIVF21
+_0x2080003:
 	ADIW R28,8
 	RET
 ; .FEND
 _yatan:
 ; .FSTART _yatan
 	RCALL __PUTPARD2
-	RCALL SUBOPT_0x1B
+	RCALL SUBOPT_0xC
 	__GETD1N 0x3ED413CD
 	RCALL __CMPF12
 	BRSH _0x2000020
-	RCALL SUBOPT_0x1B
+	RCALL SUBOPT_0xC
 	RCALL _xatan
 	RJMP _0x2080002
 _0x2000020:
-	RCALL SUBOPT_0x1B
+	RCALL SUBOPT_0xC
 	__GETD1N 0x401A827A
 	RCALL __CMPF12
 	BREQ PC+2
 	BRCC PC+2
 	RJMP _0x2000021
-	RCALL SUBOPT_0x1C
-	RCALL SUBOPT_0x1D
+	RCALL SUBOPT_0x2E
+	RCALL SUBOPT_0xD
+	RCALL SUBOPT_0x30
 	__GETD2N 0x3FC90FDB
 	RCALL __SWAPD12
 	RCALL __SUBF12
 	RJMP _0x2080002
 _0x2000021:
-	RCALL SUBOPT_0x1C
+	RCALL SUBOPT_0x2E
+	RCALL SUBOPT_0xD
 	RCALL __SUBF12
 	PUSH R23
 	PUSH R22
 	PUSH R31
 	PUSH R30
-	RCALL SUBOPT_0x1C
+	RCALL SUBOPT_0x2E
+	RCALL SUBOPT_0xD
 	RCALL __ADDF12
 	POP  R26
 	POP  R27
 	POP  R24
 	POP  R25
-	RCALL SUBOPT_0x1D
+	RCALL SUBOPT_0x30
 	__GETD2N 0x3F490FDB
 	RCALL __ADDF12
 _0x2080002:
@@ -2761,7 +3506,7 @@ _0x2080002:
 ; .FEND
 _atan2:
 ; .FSTART _atan2
-	RCALL SUBOPT_0x17
+	RCALL SUBOPT_0x2C
 	__CPD10
 	BRNE _0x200002D
 	__GETD1S 8
@@ -2770,7 +3515,7 @@ _atan2:
 	__GETD1N 0x7F7FFFFF
 	RJMP _0x2080001
 _0x200002E:
-	RCALL SUBOPT_0x1E
+	RCALL SUBOPT_0x31
 	RCALL __CPD02
 	BRGE _0x200002F
 	__GETD1N 0x3FC90FDB
@@ -2780,33 +3525,33 @@ _0x200002F:
 	RJMP _0x2080001
 _0x200002D:
 	__GETD1S 4
-	RCALL SUBOPT_0x1E
+	RCALL SUBOPT_0x31
 	RCALL __DIVF21
-	RCALL SUBOPT_0x4
+	RCALL SUBOPT_0xB
 	__GETD2S 4
 	RCALL __CPD02
 	BRGE _0x2000030
 	LDD  R26,Y+11
 	TST  R26
 	BRMI _0x2000031
-	RCALL SUBOPT_0x1B
+	RCALL SUBOPT_0xC
 	RCALL _yatan
 	RJMP _0x2080001
 _0x2000031:
-	RCALL SUBOPT_0x1F
+	RCALL SUBOPT_0x32
 	RCALL __ANEGF1
 	RJMP _0x2080001
 _0x2000030:
 	LDD  R26,Y+11
 	TST  R26
 	BRMI _0x2000032
-	RCALL SUBOPT_0x1F
+	RCALL SUBOPT_0x32
 	__GETD2N 0x40490FDB
 	RCALL __SWAPD12
 	RCALL __SUBF12
 	RJMP _0x2080001
 _0x2000032:
-	RCALL SUBOPT_0x1B
+	RCALL SUBOPT_0xC
 	RCALL _yatan
 	__GETD2N 0xC0490FDB
 	RCALL __ADDF12
@@ -2826,221 +3571,361 @@ _0x2080001:
 	.CSEG
 
 	.DSEG
-_g_flag_compute:
+_g_tick:
 	.BYTE 0x1
-_g_pid:
-	.BYTE 0x2C
-_counter_S0000002000:
+_imu:
+	.BYTE 0x14
+_filt:
+	.BYTE 0x9
+_pid:
+	.BYTE 0x25
+_line_S0000001000:
+	.BYTE 0x10
+_idx_S0000001000:
 	.BYTE 0x1
-_g_alpha_G002:
+_gyro_bias_G005:
 	.BYTE 0x4
+_who_id_G005:
+	.BYTE 0x1
 __seed_G101:
 	.BYTE 0x4
 
 	.CSEG
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:6 WORDS
 SUBOPT_0x0:
-	LDI  R30,LOW(_g_pid)
-	LDI  R31,HIGH(_g_pid)
+	LDD  R30,Y+1
+	LDI  R31,0
+	SUBI R30,LOW(-_line_S0000001000)
+	SBCI R31,HIGH(-_line_S0000001000)
+	LD   R26,Z
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 11 TIMES, CODE SIZE REDUCTION:28 WORDS
+SUBOPT_0x1:
+	__GETD1S 2
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
+SUBOPT_0x2:
+	__CWD1
+	__ADDD12
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:10 WORDS
+SUBOPT_0x3:
+	__PUTD1S 2
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:22 WORDS
+SUBOPT_0x4:
+	RCALL SUBOPT_0x1
+	RCALL __CDF1
+	MOVW R26,R30
+	MOVW R24,R22
+	__GETD1N 0x41200000
+	RCALL __DIVF21
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:30 WORDS
+SUBOPT_0x5:
+	__GETD1N 0x41200000
+	RCALL __MULF12
+	RCALL __CFD1
+	MOVW R26,R30
+	MOVW R24,R22
+	RJMP _uart_put_int
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x6:
+	IN   R30,0x5
+	LDI  R26,LOW(32)
+	EOR  R30,R26
+	OUT  0x5,R30
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x7:
+	LDI  R30,LOW(_filt)
+	LDI  R31,HIGH(_filt)
 	ST   -Y,R31
 	ST   -Y,R30
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x1:
-	RCALL __PUTPARD1
-	__GETD1N 0x0
-	RCALL __PUTPARD1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:13 WORDS
-SUBOPT_0x2:
-	__GETD1N 0x0
-	RET
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x3:
+SUBOPT_0x8:
+	LDI  R30,LOW(_pid)
+	LDI  R31,HIGH(_pid)
+	ST   -Y,R31
+	ST   -Y,R30
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:16 WORDS
+SUBOPT_0x9:
+	__GETD1N 0x0
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0xA:
+	RCALL __PUTPARD1
 	__GETD2N 0x3C23D70A
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0x4:
+SUBOPT_0xB:
 	__PUTD1S 0
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x5:
-	__GETD1S 2
+;OPTIMIZER ADDED SUBROUTINE, CALLED 9 TIMES, CODE SIZE REDUCTION:22 WORDS
+SUBOPT_0xC:
+	__GETD2S 0
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:16 WORDS
+SUBOPT_0xD:
+	__GETD2N 0x3F800000
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0xE:
+	MOVW R26,R16
+	__CWD2
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:18 WORDS
+SUBOPT_0xF:
+	RCALL SUBOPT_0x9
+	__PUTDP1
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+SUBOPT_0x10:
+	__PUTD1RNS 16,4
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x11:
+	LDI  R30,LOW(0)
+	ST   X,R30
+	LDD  R17,Y+1
+	LDD  R16,Y+0
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x12:
+	__GETD1S 10
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:6 WORDS
+SUBOPT_0x13:
+	MOVW R26,R16
+	__PUTDP1
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x14:
+	MOVW R30,R16
+	__GETD2Z 4
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x15:
+	MOVW R26,R16
+	__GETD1P_INC
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 15 TIMES, CODE SIZE REDUCTION:40 WORDS
+SUBOPT_0x16:
+	__GETD1P_INC
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:6 WORDS
+SUBOPT_0x17:
+	__GETD2S 10
+	RCALL __MULF12
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:9 WORDS
+SUBOPT_0x18:
+	LDI  R30,LOW(0)
+	STS  137,R30
+	STS  136,R30
+	STS  139,R30
+	STS  138,R30
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x6:
+SUBOPT_0x19:
 	ST   -Y,R27
 	ST   -Y,R26
 	ST   -Y,R17
 	ST   -Y,R16
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
-	RCALL _Motor_PwmValue_G001
+	RCALL _clamp_duty_G002
 	MOVW R16,R30
 	LDD  R26,Y+3
 	TST  R26
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x7:
-	RCALL _i2c_delay_G002
-	CBI  0x7,5
-	RCALL _i2c_delay_G002
-	SBI  0x7,5
-	RJMP _i2c_delay_G002
+;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:7 WORDS
+SUBOPT_0x1A:
+	__GETD1N 0x64
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+SUBOPT_0x1B:
+	RCALL __MULD12
+	MOVW R26,R30
+	MOVW R24,R22
+	RCALL SUBOPT_0x1A
+	RCALL __DIVD21
+	MOVW R26,R30
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x1C:
+	__GETD1S 22
+	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x8:
-	RCALL _i2c_stop_G002
-	RCALL _i2c_start_G002
-	LDI  R26,LOW(208)
-	RJMP _i2c_write_G002
+SUBOPT_0x1D:
+	__GETD1S 18
+	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0x9:
-	RCALL _i2c_write_G002
-	LDI  R26,LOW(0)
-	RCALL _i2c_write_G002
-	RJMP SUBOPT_0x8
+SUBOPT_0x1E:
+	__GETD1S 14
+	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:8 WORDS
-SUBOPT_0xA:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x1F:
+	__GETD1S 6
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:6 WORDS
+SUBOPT_0x20:
+	MOVW R30,R16
+	__GETD2Z 16
+	MOVW R0,R26
+	MOVW R26,R16
+	ADIW R26,28
+	RJMP SUBOPT_0x16
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+SUBOPT_0x21:
+	__PUTD1RNS 16,16
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:4 WORDS
+SUBOPT_0x22:
+	RCALL SUBOPT_0x1D
+	__PUTD1RNS 16,20
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x23:
+	__GETD2S 2
+	RCALL __CMPF12
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x24:
+	MOVW R26,R16
+	ADIW R26,32
+	RCALL SUBOPT_0x16
+	RCALL __ANEGF1
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x25:
+	__GETD1S 17
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:4 WORDS
+SUBOPT_0x26:
+	__GETD1S 1
+	__CPD10
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
+SUBOPT_0x27:
+	__GETD2S 1
+	__GETD1N 0xA
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x28:
+	LDI  R26,LOW(208)
+	RCALL _i2c_start
+	MOV  R26,R16
+	RJMP _i2c_write
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+SUBOPT_0x29:
+	ST   -Y,R30
+	LDI  R26,LOW(0)
+	RCALL _mpu_write_reg_G005
+	LDI  R26,LOW(10)
+	LDI  R27,0
+	RJMP _delay_ms
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:12 WORDS
+SUBOPT_0x2A:
+	LD   R30,X+
+	LD   R31,X+
 	__CWD1
 	RCALL __CDF1
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0xB:
-	LDD  R26,Y+30
-	LDD  R27,Y+30+1
-	ADIW R26,12
-	__GETD1P_INC
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0xC:
-	__PUTD1SNS 30,20
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0xD:
-	__GETD2Z 16
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0xE:
-	LDS  R26,_g_alpha_G002
-	LDS  R27,_g_alpha_G002+1
-	LDS  R24,_g_alpha_G002+2
-	LDS  R25,_g_alpha_G002+3
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:16 WORDS
-SUBOPT_0xF:
-	__PUTDP1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x10:
-	__GETD1S 6
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 15 TIMES, CODE SIZE REDUCTION:40 WORDS
-SUBOPT_0x11:
-	__GETD1P_INC
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x12:
-	MOVW R30,R16
-	__GETD2Z 12
+SUBOPT_0x2B:
+	LDI  R30,LOW(132)
+	STS  188,R30
+	RCALL _twi_wait_G006
+	LDS  R30,185
+	ANDI R30,LOW(0xF8)
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x13:
-	MOVW R30,R16
-	RCALL SUBOPT_0xD
-	MOVW R0,R26
-	MOVW R26,R16
-	ADIW R26,36
-	RJMP SUBOPT_0x11
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x14:
-	__PUTD1RNS 16,16
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:8 WORDS
-SUBOPT_0x15:
-	__PUTD1RNS 16,32
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:6 WORDS
-SUBOPT_0x16:
-	MOVW R30,R16
-	__GETD2Z 32
-	MOVW R0,R26
-	MOVW R26,R16
-	ADIW R26,40
-	RJMP SUBOPT_0x11
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x17:
+SUBOPT_0x2C:
 	RCALL __PUTPARD2
 	SBIW R28,4
 	__GETD1S 4
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x18:
+SUBOPT_0x2D:
 	__GETD2S 4
 	RCALL __MULF12
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:16 WORDS
-SUBOPT_0x19:
+SUBOPT_0x2E:
 	__GETD1S 0
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x1A:
+SUBOPT_0x2F:
 	RCALL __MULF12
 	__GETD2N 0x414A8F4E
 	RCALL __ADDF12
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:13 WORDS
-SUBOPT_0x1B:
-	__GETD2S 0
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:6 WORDS
-SUBOPT_0x1C:
-	RCALL SUBOPT_0x19
-	__GETD2N 0x3F800000
-	RET
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x1D:
+SUBOPT_0x30:
 	RCALL __DIVF21
 	MOVW R26,R30
 	MOVW R24,R22
 	RJMP _xatan
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x1E:
+SUBOPT_0x31:
 	__GETD2S 8
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x1F:
-	RCALL SUBOPT_0x19
+SUBOPT_0x32:
+	RCALL SUBOPT_0x2E
 	RCALL __ANEGF1
 	MOVW R26,R30
 	MOVW R24,R22
@@ -3049,10 +3934,6 @@ SUBOPT_0x1F:
 ;RUNTIME LIBRARY
 
 	.CSEG
-__SAVELOCR6:
-	ST   -Y,R21
-__SAVELOCR5:
-	ST   -Y,R20
 __SAVELOCR4:
 	ST   -Y,R19
 __SAVELOCR3:
@@ -3062,10 +3943,6 @@ __SAVELOCR2:
 	ST   -Y,R16
 	RET
 
-__LOADLOCR6:
-	LDD  R21,Y+5
-__LOADLOCR5:
-	LDD  R20,Y+4
 __LOADLOCR4:
 	LDD  R19,Y+3
 __LOADLOCR3:
@@ -3091,12 +3968,120 @@ __ANEGD1:
 	SBCI R23,-1
 	RET
 
-__GETD1P:
-	LD   R30,X+
-	LD   R31,X+
-	LD   R22,X+
-	LD   R23,X
-	SBIW R26,3
+__ANEGD2:
+	COM  R27
+	COM  R24
+	COM  R25
+	NEG  R26
+	SBCI R27,-1
+	SBCI R24,-1
+	SBCI R25,-1
+	RET
+
+__MULD12:
+__MULD12U:
+	MUL  R23,R26
+	MOV  R23,R0
+	MUL  R22,R27
+	ADD  R23,R0
+	MUL  R31,R24
+	ADD  R23,R0
+	MUL  R30,R25
+	ADD  R23,R0
+	MUL  R22,R26
+	MOV  R22,R0
+	ADD  R23,R1
+	MUL  R31,R27
+	ADD  R22,R0
+	ADC  R23,R1
+	MUL  R30,R24
+	ADD  R22,R0
+	ADC  R23,R1
+	CLR  R24
+	MUL  R31,R26
+	MOV  R31,R0
+	ADD  R22,R1
+	ADC  R23,R24
+	MUL  R30,R27
+	ADD  R31,R0
+	ADC  R22,R1
+	ADC  R23,R24
+	MUL  R30,R26
+	MOV  R30,R0
+	ADD  R31,R1
+	ADC  R22,R24
+	ADC  R23,R24
+	RET
+
+__DIVD21U:
+	PUSH R19
+	PUSH R20
+	PUSH R21
+	CLR  R0
+	CLR  R1
+	MOVW R20,R0
+	LDI  R19,32
+__DIVD21U1:
+	LSL  R26
+	ROL  R27
+	ROL  R24
+	ROL  R25
+	ROL  R0
+	ROL  R1
+	ROL  R20
+	ROL  R21
+	SUB  R0,R30
+	SBC  R1,R31
+	SBC  R20,R22
+	SBC  R21,R23
+	BRCC __DIVD21U2
+	ADD  R0,R30
+	ADC  R1,R31
+	ADC  R20,R22
+	ADC  R21,R23
+	RJMP __DIVD21U3
+__DIVD21U2:
+	SBR  R26,1
+__DIVD21U3:
+	DEC  R19
+	BRNE __DIVD21U1
+	MOVW R30,R26
+	MOVW R22,R24
+	MOVW R26,R0
+	MOVW R24,R20
+	POP  R21
+	POP  R20
+	POP  R19
+	RET
+
+__DIVD21:
+	RCALL __CHKSIGND
+	RCALL __DIVD21U
+	BRTC __DIVD211
+	RCALL __ANEGD1
+__DIVD211:
+	RET
+
+__MODD21U:
+	RCALL __DIVD21U
+	MOVW R30,R26
+	MOVW R22,R24
+	RET
+
+__CHKSIGND:
+	CLT
+	SBRS R23,7
+	RJMP __CHKSD1
+	RCALL __ANEGD1
+	SET
+__CHKSD1:
+	SBRS R25,7
+	RJMP __CHKSD2
+	RCALL __ANEGD2
+	BLD  R0,0
+	INC  R0
+	BST  R0,0
+__CHKSD2:
 	RET
 
 __PUTPARD1:
@@ -3657,6 +4642,123 @@ __CMPF120:
 	BRLO __CMPF122
 	BREQ __CMPF123
 	RJMP __CMPF121
+
+	.equ __i2c_dir_scl=__i2c_port-1
+	.equ __i2c_pin_scl=__i2c_port-2
+	.equ __i2c_dir_sda=__i2c_port-1
+	.equ __i2c_pin_sda=__i2c_port-2
+
+_i2c_init:
+	cbi  __i2c_port_scl,__scl_bit
+	cbi  __i2c_port_sda,__sda_bit
+	sbi  __i2c_dir_scl,__scl_bit
+	cbi  __i2c_dir_sda,__sda_bit
+	rjmp __i2c_delay2
+
+_i2c_start:
+	cbi  __i2c_dir_sda,__sda_bit
+	cbi  __i2c_dir_scl,__scl_bit
+	clr  r30
+	nop
+	sbis __i2c_pin_sda,__sda_bit
+	ret
+	sbis __i2c_pin_scl,__scl_bit
+	ret
+	rcall __i2c_delay1
+	sbi  __i2c_dir_sda,__sda_bit
+	rcall __i2c_delay1
+	sbi  __i2c_dir_scl,__scl_bit
+	ldi  r30,1
+__i2c_delay1:
+	ldi  r22,10
+	rjmp __i2c_delay2l
+
+_i2c_stop:
+	sbi  __i2c_dir_sda,__sda_bit
+	sbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay2
+	cbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay1
+	cbi  __i2c_dir_sda,__sda_bit
+__i2c_delay2:
+	ldi  r22,20
+__i2c_delay2l:
+	dec  r22
+	brne __i2c_delay2l
+	ret
+
+_i2c_read:
+	ldi  r23,8
+__i2c_read0:
+	cbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay1
+__i2c_read3:
+	sbis __i2c_pin_scl,__scl_bit
+	rjmp __i2c_read3
+	rcall __i2c_delay1
+	clc
+	sbic __i2c_pin_sda,__sda_bit
+	sec
+	sbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay2
+	rol  r30
+	dec  r23
+	brne __i2c_read0
+	tst  r26
+	brne __i2c_read1
+	cbi  __i2c_dir_sda,__sda_bit
+	rjmp __i2c_read2
+__i2c_read1:
+	sbi  __i2c_dir_sda,__sda_bit
+__i2c_read2:
+	rcall __i2c_delay1
+	cbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay2
+	sbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay1
+	cbi  __i2c_dir_sda,__sda_bit
+	rjmp __i2c_delay1
+
+_i2c_write:
+	ldi  r23,8
+__i2c_write0:
+	lsl  r26
+	brcc __i2c_write1
+	cbi  __i2c_dir_sda,__sda_bit
+	rjmp __i2c_write2
+__i2c_write1:
+	sbi  __i2c_dir_sda,__sda_bit
+__i2c_write2:
+	rcall __i2c_delay2
+	cbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay1
+__i2c_write3:
+	sbis __i2c_pin_scl,__scl_bit
+	rjmp __i2c_write3
+	rcall __i2c_delay1
+	sbi  __i2c_dir_scl,__scl_bit
+	dec  r23
+	brne __i2c_write0
+	cbi  __i2c_dir_sda,__sda_bit
+	rcall __i2c_delay1
+	cbi  __i2c_dir_scl,__scl_bit
+	rcall __i2c_delay2
+	ldi  r30,1
+	sbic __i2c_pin_sda,__sda_bit
+	clr  r30
+	sbi  __i2c_dir_scl,__scl_bit
+	rjmp __i2c_delay1
+
+_delay_ms:
+	adiw r26,0
+	breq __delay_ms1
+__delay_ms0:
+	wdr
+	__DELAY_USW 0xFA0
+	sbiw r26,1
+	brne __delay_ms0
+__delay_ms1:
+	ret
 
 ;END OF CODE MARKER
 __END_OF_CODE:

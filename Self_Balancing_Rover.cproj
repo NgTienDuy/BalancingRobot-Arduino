@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.HPInfoTech.CodeVisionAVR.C</ToolchainName>
-    <ProjectGuid>{CE3D0CCB-423D-497C-A76A-A46C3F34E8A0}</ProjectGuid>
+    <ProjectGuid>{A762E316-423D-497C-A76A-A46C3F34E8A0}</ProjectGuid>
     <avrdevice>ATmega328P</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
@@ -53,10 +53,19 @@
     <Compile Include="Self_Balancing_Rover.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="motor.c">
+    <Compile Include="myi2c.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uart.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mpu6050.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="filter.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="motor.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="pid.c">

@@ -1,0 +1,30 @@
+/*============================================================================
+  mpu6050.h  -  Driver MPU6050 qua TWI phan cung
+============================================================================*/
+#ifndef MPU6050_H
+#define MPU6050_H
+
+#include <stdint.h>
+
+#define MPU6050_RA_SMPLRT_DIV    0x19
+#define MPU6050_RA_CONFIG        0x1A
+#define MPU6050_RA_GYRO_CONFIG   0x1B
+#define MPU6050_RA_ACCEL_CONFIG  0x1C
+#define MPU6050_RA_ACCEL_XOUT_H  0x3B
+#define MPU6050_RA_PWR_MGMT_1    0x6B
+#define MPU6050_RA_WHO_AM_I      0x75
+
+typedef struct
+{
+    int16_t ax, ay, az;
+    int16_t gx, gy, gz;
+    float   angle_acc;   /* deg  - goc tu accelerometer            */
+    float   gyro_rate;   /* deg/s - gyro tren truc nghieng (da tru bias) */
+} MPU6050_Data;
+
+unsigned char MPU6050_Init(void);            /* 1 neu cam bien phan hoi    */
+unsigned char MPU6050_WhoAmI(void);          /* tra ma WHO_AM_I doc duoc   */
+void          MPU6050_CalibrateGyro(void);   /* trung binh bias luc dung yen*/
+void          MPU6050_Read(MPU6050_Data *d); /* doc raw + chuyen doi        */
+
+#endif
